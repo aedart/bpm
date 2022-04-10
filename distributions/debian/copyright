@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: bashy
+Upstream-Name: bpm
 Upstream-Contact: Alin Eugen Deac <aedart@gmail.com>
-Source: https://github.com/aedart/bashy
+Source: https://github.com/aedart/bpm
 
 Files: *
 Copyright: 2022 Alin Eugen Deac <aedart@gmail.com>

@@ -9,7 +9,7 @@ temp/*
 
 # Ignore temporary files from dirstributions
 distributions/debian/.debhelper
-distributions/debian/bashy
+distributions/debian/bpm
 
 # Other package formats...
 yarn.lock

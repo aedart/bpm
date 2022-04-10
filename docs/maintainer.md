@@ -19,11 +19,11 @@ To install the current version locally, run the following:
 **Warning**: _This MIGHT replace or destroy your current installed version!_
 
 ```bash
-sudo dpkg -i .build/distributions/debian/bashy_*.deb
+sudo dpkg -i .build/distributions/debian/bpm_*.deb
 ```
 
 ## How to uninstall
 
 ```bash
-sudo dpkg -r bashy
+sudo dpkg -r bpm
 ```

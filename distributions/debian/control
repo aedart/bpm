@@ -1,14 +1,14 @@
-Source: bashy
+Source: bpm
 Section: misc
 Priority: optional
 Maintainer: Alin Eugen Deac <aedart@gmail.com>
 Build-Depends: debhelper-compat (= 12)
 Standards-Version: 4.4.1
-Homepage: https://github.com/aedart/bashy
-Vcs-Browser: https://github.com/aedart/bashy
-Vcs-Git: https://github.com/aedart/bashy.git
+Homepage: https://github.com/aedart/bpm
+Vcs-Browser: https://github.com/aedart/bpm
+Vcs-Git: https://github.com/aedart/bpm.git
 
-Package: bashy
+Package: bpm
 Architecture: all
 Depends: bash (>= 5.0), git
 Description: Bashy Package Manager

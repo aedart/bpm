@@ -1,4 +1,4 @@
-# Bashy Package Manager
+# Bashy Package Manager (bpm)
 
 Opinionated package manager for your bash scripts.
 

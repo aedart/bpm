@@ -53,4 +53,4 @@ echo "[Debian build complete]"
 echo " - Moving *.deb file into $DEBIAN_BUILD_DIR"
 echo ""
 cd $WORKING_DIR
-mv -f bashy_* "$DEBIAN_BUILD_DIR"
+mv -f bpm_* "$DEBIAN_BUILD_DIR"
