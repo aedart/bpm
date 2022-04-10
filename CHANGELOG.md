@@ -10,5 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Initialisation of project, top-level directory structure, changelog, license...etc 
+* `bin/build` helper to build debian package
 
 [unreleased]: https://github.com/aedart/bashy/compare/HEAD
