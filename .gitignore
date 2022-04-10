@@ -1,0 +1,13 @@
+.DS_Store
+.idea/
+Thumbs.db
+
+.build/
+temp/*
+
+yarn.lock
+package-lock.json
+/node_modules
+
+# Ignore internal todo-list
+.todo.md
