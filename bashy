@@ -15,4 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-echo 'Bash binary file...'
+readonly BASHY_INSTALL_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+# Load application
+if [ "$BASHY_INSTALL_DIR" == "/usr/bin" ]; then
+    source '/usr/lib/bashy/src/app.sh'
+else
+    source 'src/app.sh'
+fi
