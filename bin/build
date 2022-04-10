@@ -38,6 +38,9 @@ fi
 
 # Build *.deb package
 # TODO: This will require a lot more fine tuning
+#
+# TODO: what about debian changelog: run "dch -i" ???
+#
 # @see https://manpages.debian.org/testing/dpkg-dev/dpkg-buildpackage.1.en.html
 cd $DISTRIBUTIONS_DIR
 dpkg-buildpackage -b -uc
