@@ -1,1 +1,2 @@
 ../bashy usr/bin
+../src/* usr/lib/bashy/src
