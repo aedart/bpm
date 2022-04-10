@@ -1,10 +1,17 @@
+# General
 .DS_Store
 .idea/
 Thumbs.db
 
+# Build and temp directories
 .build/
 temp/*
 
+# Ignore temporary files from dirstributions
+distributions/debian/.debhelper
+distributions/debian/bashy
+
+# Other package formats...
 yarn.lock
 package-lock.json
 /node_modules
