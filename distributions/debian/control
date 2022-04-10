@@ -10,6 +10,6 @@ Vcs-Git: https://github.com/aedart/bashy.git
 
 Package: bashy
 Architecture: all
-Depends: bash (>= 5.0.17), git
+Depends: bash (>= 5.0), git
 Description: Bashy Package Manager
  An opinionated package manager for your bash scripts.
