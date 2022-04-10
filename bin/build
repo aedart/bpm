@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# Set error handling
+set -o errexit  # abort on nonzero exit status
+set -o nounset  # abort on unbound variable
+set -o pipefail # don't hide errors within pipes
+
+# Define a few paths
+readonly SCRIPT_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+readonly WORKING_DIR=$( cd -- "$( dirname -- "$SCRIPT_PATH" )" &> /dev/null && pwd)
+readonly DISTRIBUTIONS_DIR="$WORKING_DIR/distributions"
+readonly BUILD_DIR="$WORKING_DIR/.build"
+readonly DISTRIBUTIONS_OUTPUT_DIR="$BUILD_DIR/distributions"
+
+# Create build directory, if it does not exist
+if [ ! -d $DISTRIBUTIONS_OUTPUT_DIR ]; then
+    mkdir -p "$DISTRIBUTIONS_OUTPUT_DIR"
+fi
+
+# -----------------------------------------------------------------------------------------------------
+# Debian distribution
+# -----------------------------------------------------------------------------------------------------
+
+echo 'Building debian package'
+
+# Ensure debian output directory exists
+readonly DEBIAN_BUILD_DIR="$DISTRIBUTIONS_OUTPUT_DIR/debian"
+if [ ! -d $DEBIAN_BUILD_DIR ]; then
+    mkdir -p "$DEBIAN_BUILD_DIR"
+fi
+
+# Remove evt. previous built *.deb files
+if [ "$(ls -A $DEBIAN_BUILD_DIR)" ]; then
+   echo " - Removing previous built items"
+   echo ""
+   rm -rfv "$DEBIAN_BUILD_DIR/*"
+fi
+
+# Build *.deb package
+# TODO: This will require a lot more fine tuning
+# @see https://manpages.debian.org/testing/dpkg-dev/dpkg-buildpackage.1.en.html
+cd $DISTRIBUTIONS_DIR
+dpkg-buildpackage -b -uc
+
+# Move built *.deb file into output directory - this is needed because the `dpkg-buildpackage` outputs
+# its files in ../ path (no idea why and there is no way to configure this otherwise)
+# @see https://pmhahn.github.io/debian-oot-build/
+echo ""
+echo "[Debian build complete]"
+echo " - Moving *.deb file into $DEBIAN_BUILD_DIR"
+echo ""
+cd $WORKING_DIR
+mv -f bashy_* "$DEBIAN_BUILD_DIR"
