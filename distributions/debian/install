@@ -1,2 +1,3 @@
 ../bashy usr/bin
 ../src/* usr/lib/bashy/src
+../README.md usr/lib/bashy
