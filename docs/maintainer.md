@@ -27,3 +27,7 @@ sudo dpkg -i .build/distributions/debian/bpm_*.deb
 ```bash
 sudo dpkg -r bpm
 ```
+
+## Code Style Guide
+
+Inspiration should be drawn from [Google's shell guide](https://google.github.io/styleguide/shellguide.html) for bash scripts. 
