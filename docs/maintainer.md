@@ -2,6 +2,17 @@
 
 This document serves as _preliminary_ internal documentation and notes for "bashy" maintainers.
 
+## Prerequisites
+
+You will require the following to be installed:
+
+```console
+sudo apt install dh-make build-essential devscripts
+sudo apt install shellcheck
+```
+
+**Note**: _Not sure about `devscripts`..._
+
 ## How to build
 
 To build the debian package, run the following.
