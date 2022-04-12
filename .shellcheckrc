@@ -1,0 +1,10 @@
+# Shellcheck configuration for this project
+# @see https://github.com/koalaman/shellcheck
+
+# TODO: Warning this is never read, because location of "rc" file is expected to be located
+# TODO: way outside the project directory (...oh man)
+# TODO: @see https://github.com/koalaman/shellcheck/blob/master/shellcheck.1.md#rc-files
+
+source-path=SCRIPTDIR
+source-path=./src
+external-sources=true
