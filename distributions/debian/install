@@ -1,3 +1,4 @@
 ../bpm usr/bin
 ../src/* usr/lib/bpm/src
 ../README.md usr/lib/bpm
+../LICENSE usr/lib/bpm
