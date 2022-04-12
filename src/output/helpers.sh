@@ -106,10 +106,10 @@ output_helpers::failCross() {
 #   - writes message to stdout
 #
 output_helpers::title() {
-    output_helpers::write
+#    output_helpers::write
     output_helpers::write "${colour_green}${text_style_bold} $* ${restore}${colour_yellow}"
-    output_helpers::line '_'
-    output_helpers::write "${restore}"
+    output_helpers::line '-'
+#    output_helpers::write "${restore}"
 }
 
 ##
@@ -170,6 +170,8 @@ output_helpers::line() {
 ##
 # Outputs emergency level message
 #
+# E.g. System is unusable
+#
 # Globals:
 #   - $QUIET if set to 1, when method will NOT output!
 # Arguments:
@@ -185,6 +187,8 @@ output_helpers::emergency() {
 ##
 # Outputs alert level message
 #
+# E.g. Alert condition, conditions that require immediate actions
+#
 # Globals:
 #   - $QUIET if set to 1, when method will NOT output!
 # Arguments:
@@ -198,6 +202,8 @@ output_helpers::alert() {
 
 ##
 # Outputs critical level message
+#
+# E.g. Critical conditions, when a component or service is unavailable.
 #
 # Globals:
 #   - $QUIET if set to 1, when method will NOT output!
@@ -213,6 +219,9 @@ output_helpers::critical() {
 ##
 # Outputs error level message
 #
+# E.g. Error conditions, such as runtime errors that do not require immediate,
+# but should be logged and handled appropriately
+#
 # Globals:
 #   - $QUIET if set to 1, when method will NOT output!
 # Arguments:
@@ -226,6 +235,8 @@ output_helpers::error() {
 
 ##
 # Outputs warning level message
+#
+# E.g. Warning conditions
 #
 # Globals:
 #   - $QUIET if set to 1, when method will NOT output!
@@ -241,6 +252,8 @@ output_helpers::warn() {
 ##
 # Outputs notice level message
 #
+# E.g. Normal but significant condition
+#
 # Globals:
 #   - $QUIET if set to 1, when method will NOT output!
 # Arguments:
@@ -254,6 +267,8 @@ output_helpers::notice() {
 
 ##
 # Outputs information level message
+#
+# E.g. Informational messages
 #
 # Globals:
 #   - $QUIET if set to 1, when method will NOT output!
