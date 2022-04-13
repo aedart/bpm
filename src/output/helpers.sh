@@ -256,8 +256,24 @@ output_helpers::error() {
 # Outputs:
 #   - writes message to stdout
 #
-output_helpers::warn() {
+output_helpers::warning() {
     output_helpers::write "[${colour_yellow}warning${restore}] ${colour_yellow}$1${restore}"
+}
+
+##
+# Alias for warning level message
+#
+# E.g. Warning conditions
+#
+# Globals:
+#   - $QUIET if set to 1, when method will NOT output!
+# Arguments:
+#   - string message
+# Outputs:
+#   - writes message to stdout
+#
+output_helpers::warn() {
+    output_helpers::warning "$1"
 }
 
 ##
