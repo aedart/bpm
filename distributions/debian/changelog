@@ -2,4 +2,14 @@ bpm (0.1.0) unstable; urgency=low
 
   * Initialisation of project, top-level directory structure, changelog, license...etc
 
- -- Alin Eugen Deac <aedart@gmail.com>  Sun, 10 Apr 2022 13:09:08 +0200
+  * Core cli application architecture for invoking commands with eventual options
+
+  * ANSI output utilities
+
+  * `bin/build` helper to build debian package
+
+  * `bin/build-version` helper to build a `version` text file
+
+  * `docs/maintainer` preliminary maintainer documentation
+
+ -- Alin Eugen Deac <aedart@gmail.com>  Wed, 13 Apr 2022 18:19:02 +0200
