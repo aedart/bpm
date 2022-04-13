@@ -2,7 +2,7 @@
 
 Opinionated package manager for your bash scripts.
 
-**WARNING** _This application is currently HIGHLY EXPERIMENTAL. Do NOT use this for production!_
+**WARNING** _This application is currently **HIGHLY EXPERIMENTAL** and **VERY INCOMPLETE**... Do NOT use this for production!_
 
 # Official Documentation
 
