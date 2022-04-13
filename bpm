@@ -17,9 +17,13 @@
 
 readonly BPM_INSTALL_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-# Load application
-if [ "$BPM_INSTALL_DIR" == "/usr/bin" ]; then
-    source '/usr/lib/bpm/src/app.sh'
-else
-    source 'src/app.sh'
+# Resolve library directory
+BPM_LIBRARY_DIR='./'
+if [ "${BPM_INSTALL_DIR}" == "/usr/bin" ]; then
+    BPM_LIBRARY_DIR='/usr/lib/bpm'
 fi
+
+readonly BPM_LIBRARY_DIR
+
+# Load application
+source "${BPM_LIBRARY_DIR}/src/app.sh"
