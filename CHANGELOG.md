@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2022-04-13
+
 ### Added
 
-* Initialisation of project, top-level directory structure, changelog, license...etc 
+* Initialisation of project, top-level directory structure, changelog, license...etc
+* Core cli application architecture for invoking commands with eventual options
+* ANSI output utilities  
 * `bin/build` helper to build debian package
+* `bin/build-version` helper to build a `version` text file
 * `docs/maintainer` preliminary maintainer documentation
 
-[unreleased]: https://github.com/aedart/bashy/compare/HEAD
+[unreleased]: https://github.com/aedart/bashy/compare/0.1.0...HEAD
+[0.1.0]: https://github.com/aedart/bashy/releases/tag/0.1.0
