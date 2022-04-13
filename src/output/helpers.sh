@@ -344,7 +344,7 @@ output_helpers::debug() {
 #   - Writes to stdout
 #
 output_helpers::write() {
-    output_helpers::resolve_quiet "$(output_helpers::resolve_ansi "$*")"
+    output_helpers::resolve_quiet "$('output_helpers::resolve_ansi' "$*")"
 }
 
 ##
@@ -358,7 +358,7 @@ output_helpers::write() {
 #   - Writes to stderr
 #
 output_helpers::write_stderr() {
-    output_helpers::resolve_quiet "$(output_helpers::resolve_ansi "$*")" >&2
+    output_helpers::resolve_quiet "$('output_helpers::resolve_ansi' "$*")" >&2
 }
 
 ##
