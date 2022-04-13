@@ -25,7 +25,7 @@
 # set to readonly thereafter!
 #
 # 0 = false, 1 = true
-VERBOSE=0
+declare -i VERBOSE=0
 
 # Quiet mode
 #
@@ -33,7 +33,18 @@ VERBOSE=0
 # set to readonly thereafter!
 #
 # 0 = false, 1 = true
-QUIET=0
+declare -i QUIET=0
+
+# ANSI state
+#
+# If set to false, then ansi codes are stripped
+# from the output
+#
+# Should be captured as option by your command and
+# set to readonly thereafter!
+#
+# 0 = false, 1 = true
+declare -i ANSI=1
 
 # ------------------------------------------------------------------------
 # Output helper methods
@@ -106,10 +117,8 @@ output_helpers::failCross() {
 #   - writes message to stdout
 #
 output_helpers::title() {
-#    output_helpers::write
     output_helpers::write "${colour_green}${text_style_bold} $* ${restore}${colour_yellow}"
     output_helpers::line '-'
-#    output_helpers::write "${restore}"
 }
 
 ##
@@ -180,7 +189,9 @@ output_helpers::line() {
 #   - writes message to stderr
 #
 output_helpers::emergency() {
-    local msg=`echo $1 | tr '[:lower:]' '[:upper:]'`
+    local msg=
+    msg=$(echo "$1" | tr '[:lower:]' '[:upper:]')
+
     output_helpers::write_stderr "[${colour_bg_red}${colour_white}${text_style_bold}${text_style_blink}EMERGENCY${restore}] ${colour_red}${text_style_bold}$msg${restore}"
 }
 
@@ -297,7 +308,7 @@ output_helpers::info() {
 output_helpers::debug() {
     local force=${2:-0}
 
-    if [ $VERBOSE -eq 1 ] || [ $force -eq 1 ]; then
+    if [ $VERBOSE -eq 1 ] || [ "$force" -eq 1 ]; then
         output_helpers::write "[${colour_gray}debug${restore}] ${colour_gray}$1${restore}"
     fi
 }
@@ -317,24 +328,61 @@ output_helpers::debug() {
 #   - Writes to stdout
 #
 output_helpers::write() {
-    if [ $QUIET -ne 1 ]; then
-        echo -e "$*"
-    fi
+    output_helpers::resolve_quiet "$(output_helpers::resolve_ansi "$*")"
 }
 
 ##
 # Writes a new line to stderr
 #
 # Globals:
-#   - $QUIET if set to 1, when method will NOT output!
+#   - QUIET if set to 1, when method will NOT output!
 # Arguments:
 #   - string text to output
 # Outputs:
 #   - Writes to stderr
 #
 output_helpers::write_stderr() {
-    if [ $QUIET -ne 1 ]; then
-        echo -e "$*" >&2;
+    output_helpers::resolve_quiet "$(output_helpers::resolve_ansi "$*")" >&2
+}
+
+##
+# Outputs if QUIET global is not set to true
+#
+# Globals:
+#   - QUIET
+# Arguments:
+#   - string text to output
+# Outputs:
+#   - writes to stdout
+#
+output_helpers::resolve_quiet() {
+    if [ $QUIET -eq 0 ]; then
+        echo "$*"
+    fi
+}
+
+##
+# Outputs given string argument with or without ANSI
+#
+# If ANSI global is disabled, then argument is stripped
+# of ansi codes.
+#
+# Globals:
+#   - ANSI
+# Arguments:
+#   - string to write to output
+# Outputs:
+#   - writes to stdout
+#
+output_helpers::resolve_ansi() {
+    local output="$*"
+
+    if [ $ANSI -eq 1 ]; then
+        echo -e "${output}"
+    else
+        # Strip output from all known ansi codes
+        # shellcheck disable=SC2001
+        echo "${output}" | sed 's/\x1b\[[0-9;]*m//g'
     fi
 }
 
