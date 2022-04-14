@@ -324,7 +324,7 @@ output_helpers::info() {
 output_helpers::debug() {
     local force=${2:-0}
 
-    if [ $VERBOSE -eq 1 ] || [ "$force" -eq 1 ]; then
+    if [[ $VERBOSE -eq 1 || "$force" -eq 1 ]]; then
         output_helpers::write "[${colour_gray}debug${restore}] ${colour_gray}$1${restore}"
     fi
 }
@@ -372,7 +372,7 @@ output_helpers::write_stderr() {
 #   - writes to stdout
 #
 output_helpers::resolve_quiet() {
-    if [ $QUIET -eq 0 ]; then
+    if [[ $QUIET -eq 0 ]]; then
         echo "$*"
     fi
 }
@@ -381,10 +381,14 @@ output_helpers::resolve_quiet() {
 # Outputs given string argument with or without ANSI
 #
 # If ANSI global is disabled, then argument is stripped
-# of ansi codes.
+# of ansi codes. Method also respects is user has set the
+# NO_COLOR environment variable.
+#
+# @see https://no-color.org/
 #
 # Globals:
 #   - ANSI
+#   - NO_COLOR
 # Arguments:
 #   - string to write to output
 # Outputs:
@@ -393,12 +397,19 @@ output_helpers::resolve_quiet() {
 output_helpers::resolve_ansi() {
     local output="$*"
 
-    if [ $ANSI -eq 1 ]; then
-        echo -e "${output}"
+    # Output only ANSI if such requested. Here, we also ensure that
+    # if the $NO_COLOR environment variable is set (regardless of value)
+    # then ANSI escape codes are removed from output.
+    # @see https://no-color.org/
+    if [[ $ANSI -eq 0 || -n "${NO_COLOR-}" ]]; then
+        # Strip ansi and escape character left by $(tput seg0)
+        # Huge thanks to Jarodiv
+        # @see https://stackoverflow.com/a/52781213
+        cleaned="$( sed -r "s/\x1B(\[[0-9;]*[JKmsu]|\(B)//g" <<< "${output}" )"
+        echo "$cleaned"
     else
-        # Strip output from all known ansi codes
-        # shellcheck disable=SC2001
-        echo "${output}" | sed 's/\x1b\[[0-9;]*m//g'
+        # Output with ANSI codes...
+        echo -e "${output}"
     fi
 }
 
