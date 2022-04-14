@@ -1,5 +1,19 @@
+# The binary file
 ../bpm usr/bin
+
+# The library source directory
 ../src/* usr/lib/bpm/src
+
+# Misc
 ../README.md usr/lib/bpm
 ../LICENSE usr/lib/bpm
 ../version usr/lib/bpm
+
+# NOTE: Do not copy the auto completion directly. System might not have
+# the "bash-completion" available. This MUST be done via the "post install"
+# script...
+# ../helpers/completions/bpm usr/share/bash-completion/completions
+
+# For the above mentioned reasons, we simply just copy the "helpers", like
+# any other resource, so that "post install" can utilise it.
+../helpers usr/lib/bpm
