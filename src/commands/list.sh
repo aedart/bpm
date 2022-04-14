@@ -188,7 +188,7 @@ list::output_command() {
 
     # Create formatted output
     local formatted=
-    formatted=$(printf "%-28s%-12s\n" "${name}" "${colour_white}${description}${restore}")
+    formatted=$(printf "%-28s%-12s" "${name}" "${colour_white}${description}${restore}")
 
     # Finally, output command and evt. short description
     output_helpers::write "${formatted}"
