@@ -39,9 +39,9 @@ fi
 version='unknown'
 
 # Obtain latest tag
-if git describe --tags --abbrev=0 &> /dev/null ; then
+if git describe --tags --abbrev=0 "$(git rev-list --tags --max-count=1)" &> /dev/null ; then
     echo 'Found version from git tag'
-    version=$(git describe --tags --abbrev=0)
+    version=$(git describe --tags --abbrev=0 "$(git rev-list --tags --max-count=1)")
 else
     # No tags available... obtain latest hash
     echo 'No tags available...'
