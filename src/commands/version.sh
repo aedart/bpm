@@ -128,6 +128,28 @@ version::main() {
     local version=
     version=$(cat "${version_file}")
 
+    # In case that the application is "in development", then should be located within a git
+    # repository. If that is the case, then there is a change that an incorrect version is
+    # shown (version file only contains "latest version" from the "./bin/build-version executable).
+    # Therefore, if the application is in a git repository, show the "correct" version.
+    if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" == "true" ]; then
+
+        # Compare latest commit on HEAD with tag's hash. If they do not match, then we
+        # Re-write the version to reflect that application is in a development state.
+        tag_hash=$(git log "${version}" -1 --pretty=%H)
+        latest_commit_hash=$(git rev-parse --verify HEAD)
+
+        if [[ "${tag_hash}" != "${latest_commit_hash}" ]]; then
+            # This means that version is a developer version. For this reason,
+            # we change the version to reflect this, e.g. "dev-main@5a038a5"
+            branch=$(git branch --show-current)
+            version="dev-${branch}@$(git rev-parse --short HEAD)"
+        fi
+
+        # Otherwise, we default to whatever was obtained from the version file.
+    fi
+
+    # Output version
     output_helpers::write "${version}"
     exit $EXIT_SUCCESS
 }
