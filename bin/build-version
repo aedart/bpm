@@ -42,6 +42,22 @@ version='unknown'
 if git describe --tags --abbrev=0 "$(git rev-list --tags --max-count=1)" &> /dev/null ; then
     echo 'Found version from git tag'
     version=$(git describe --tags --abbrev=0 "$(git rev-list --tags --max-count=1)")
+
+    # Compare latest commit on HEAD with tag's hash. If they do not match, then we
+    # Re-write the version to reflect that application is in a development state.
+    tag_hash=$(git log "${version}" -1 --pretty=%H)
+    latest_commit_hash=$(git rev-parse --verify HEAD)
+
+    if [[ "${tag_hash}" != "${latest_commit_hash}" ]]; then
+
+        echo "! Latest commit hash does not match tag commit hash. Switching to \"dev-[branch]@[short_hash]\" format"
+
+        # This means that version is a developer version. For this reason,
+        # we change the version to reflect this, e.g. "dev-main@5a038a5"
+        branch=$(git branch --show-current)
+        version="dev-${branch}@$(git rev-parse --short HEAD)"
+    fi
+
 else
     # No tags available... obtain latest hash
     echo 'No tags available...'
