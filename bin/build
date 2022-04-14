@@ -27,14 +27,16 @@ readonly DISTRIBUTIONS_DIR="$WORKING_DIR/distributions"
 readonly BUILD_DIR="$WORKING_DIR/.build"
 readonly DISTRIBUTIONS_OUTPUT_DIR="$BUILD_DIR/distributions"
 
-# Create build directory, if it does not exist
-if [ ! -d $DISTRIBUTIONS_OUTPUT_DIR ]; then
-    mkdir -p "$DISTRIBUTIONS_OUTPUT_DIR"
-fi
-
 # -----------------------------------------------------------------------------------------------------
 # A few prerequisites
 # -----------------------------------------------------------------------------------------------------
+
+# Create build directory, if it does not exist
+if [ ! -d $DISTRIBUTIONS_OUTPUT_DIR ]; then
+    echo "Making directory: ${DISTRIBUTIONS_OUTPUT_DIR}"
+    mkdir -p "$DISTRIBUTIONS_OUTPUT_DIR"
+fi
+
 
 # Run the build "version" command
 command "$SCRIPT_PATH/build-version"

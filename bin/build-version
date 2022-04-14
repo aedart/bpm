@@ -20,6 +20,8 @@ set -o errexit  # abort on nonzero exit status
 set -o nounset  # abort on unbound variable
 set -o pipefail # don't hide errors within pipes
 
+echo 'Building version file'
+
 # Define a few paths
 readonly SCRIPT_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 readonly WORKING_DIR=$( cd -- "$( dirname -- "$SCRIPT_PATH" )" &> /dev/null && pwd)

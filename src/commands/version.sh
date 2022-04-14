@@ -124,11 +124,11 @@ version::main() {
         exit $EXIT_FAILURE
     fi
 
-    # Show version file contents
-    local contents=
-    contents=$(cat "${version_file}")
+    # Obtain version from file. This contains the latest tag.
+    local version=
+    version=$(cat "${version_file}")
 
-    output_helpers::write "${contents}"
+    output_helpers::write "${version}"
     exit $EXIT_SUCCESS
 }
 
