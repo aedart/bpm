@@ -65,6 +65,9 @@ fi
 #
 # TODO: what about debian changelog: run "dch -i" ???
 #
+# TODO: What about signing the package??
+# TODO: @see https://blog.packagecloud.io/how-to-gpg-sign-and-verify-deb-packages-and-apt-repositories/
+#
 # @see https://manpages.debian.org/testing/dpkg-dev/dpkg-buildpackage.1.en.html
 cd $DISTRIBUTIONS_DIR
 dpkg-buildpackage -b -uc
