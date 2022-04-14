@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * `version` command is now able to show current "dev" version, while application is located within a git repository
 * Improved `bin/build-version` helper. It's now able to obtain "dev" version, when current commit does match that of the git tag's commit. 
+* Support for `NO_COLOR` environment variable. If set, then output will remove ANSI colour codes.
+
+### Fixed
+
+* ANSI not entirely removed in `output_helpers::resolve_ansi` method
 
 ## [0.1.0] - 2022-04-13
 
