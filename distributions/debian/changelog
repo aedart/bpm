@@ -1,15 +1,20 @@
+bpm (0.2.0) unstable; urgency=low
+
+    * Added Bash auto-completion for `bpm` binary.
+    * Changed `version` command is now able to show current "dev" version, while application is located within a git repository
+    * Changed Improved `bin/build-version` helper. It's now able to obtain "dev" version, when current commit does match that of the git tag's commit.
+    * Changed Support for `NO_COLOR` environment variable. If set, then output will remove ANSI colour codes.
+    * Fixed ANSI not entirely removed in `output_helpers::resolve_ansi` method
+
+ -- Alin Eugen Deac <aedart@gmail.com>  Fri, 15 Apr 2022 15:36:42 +0200
+
 bpm (0.1.0) unstable; urgency=low
 
   * Initialisation of project, top-level directory structure, changelog, license...etc
-
   * Core cli application architecture for invoking commands with eventual options
-
   * ANSI output utilities
-
   * `bin/build` helper to build debian package
-
   * `bin/build-version` helper to build a `version` text file
-
   * `docs/maintainer` preliminary maintainer documentation
 
  -- Alin Eugen Deac <aedart@gmail.com>  Wed, 13 Apr 2022 18:19:02 +0200

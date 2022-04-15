@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2022-04-15
+
 ### Added
 
 * Bash auto-completion for `bpm` binary. 
@@ -32,5 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `bin/build-version` helper to build a `version` text file
 * `docs/maintainer` preliminary maintainer documentation
 
-[unreleased]: https://github.com/aedart/bashy/compare/0.1.0...HEAD
+[unreleased]: https://github.com/aedart/bashy/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/aedart/bashy/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/aedart/bashy/releases/tag/0.1.0
