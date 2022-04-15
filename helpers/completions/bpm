@@ -42,13 +42,12 @@ _bpm_completions() {
 
     # Stop further processing when the following conditions are true:
     #
-    #   a) there are more than two words
     #   b) last argument starts with symbol "-" (e.g. command options)
     #   c) last argument is grater or equal to two characters (short option)
     #
     # This SHOULD allow for a more advanced auto completion, when we decide to
     # customise this further for commands (see command processing)...
-    if [[ $COMP_CWORD -gt 2 && $last_arg = '-'* && "${#last_arg}" -ge 2 ]]; then
+    if [[ $last_arg = '-'* && "${#last_arg}" -ge 2 ]]; then
         return 0
     fi
 
@@ -87,6 +86,11 @@ _bpm_completions() {
     local available_commands=
     available_commands=$(bpm list --without-description --no-ansi | tr -d '\n' | tr -s ' ')
     COMPREPLY+=($(compgen -W "${available_commands}" -- ${cur}))
+
+    # Lastly, which is also a bit "hard-coded" here, the main binary bpm's "src/app.sh" accepts
+    # a few options. These too must be added here...
+    local main_options="-h --help --no-ansi"
+    COMPREPLY+=($(compgen -W "${main_options}" -- ${cur}))
 }
 
 complete -F _bpm_completions bpm
