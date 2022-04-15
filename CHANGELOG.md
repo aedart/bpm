@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+* Bash auto-completion for `bpm` binary. 
+
 ### Changed
 
 * `version` command is now able to show current "dev" version, while application is located within a git repository
