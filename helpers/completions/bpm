@@ -15,10 +15,78 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+##
+# Generates auto completion suggestions for Bashy Package Manager ("bpm")
+# executable script
+#
+# @see https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html#Programmable-Completion-Builtins
+#
+# Globals:
+#   - COMP_WORDS
+#   - COMP_CWORD
+#   - COMPREPLY
+# Returns:
+#   - 0 on success
+#
 _bpm_completions() {
-    COMPREPLY+=("sweet")
-    COMPREPLY+=("other")
-    COMPREPLY+=("never")
+
+    # The array of suggestions
+    COMPREPLY=()
+
+    # Current typed word(s)
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # The last typed argument, e.g. -h or --help...
+    # (does not have to reflect an option!)
+    local last_arg="${COMP_WORDS[$COMP_CWORD-1]}"
+
+    # Stop further processing when the following conditions are true:
+    #
+    #   a) there are more than two words
+    #   b) last argument starts with symbol "-" (e.g. command options)
+    #   c) last argument is grater or equal to two characters (short option)
+    #
+    # This SHOULD allow for a more advanced auto completion, when we decide to
+    # customise this further for commands (see command processing)...
+    if [[ $COMP_CWORD -gt 2 && $last_arg = '-'* && "${#last_arg}" -ge 2 ]]; then
+        return 0
+    fi
+
+    # When two or more words are typed...
+    if [[ $COMP_CWORD -gt 1 ]]; then
+
+        # The command that was typed
+        local command="${COMP_WORDS[1]}"
+
+        # Match the command
+        case $command in
+            # Here we can create custom argument and or options suggestions per
+            # matched command.
+            # E.g.
+#            my-command)
+#                COMPREPLY+=($(compgen -W "arg1 arg2 -h --help -v --verbose" -- ${cur}))
+#              ;;
+
+            # However, for the sake of simplicity, we are just going to default to
+            # a general approach of showing common options for given command.
+            # This may not be the most correct approach, but good enough for now.
+            *)
+                local general_options="-h --help -v --verbose --q --quiet --no-ansi"
+
+                COMPREPLY+=($(compgen -W "${general_options}" -- ${cur}))
+                ;;
+        esac
+
+        return 0
+    fi
+
+    # Otherwise, we simply display all available commands
+    #
+    # Use `bpm list --without-description` command to obtain a full list of the
+    # available commands. This will be the words that will go into "compgen"
+    local available_commands=
+    available_commands=$(bpm list --without-description --no-ansi | tr -d '\n' | tr -s ' ')
+    COMPREPLY+=($(compgen -W "${available_commands}" -- ${cur}))
 }
 
 complete -F _bpm_completions bpm
