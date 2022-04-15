@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Main application "options" to list of suggestions for auto-completion.
 
+### Removed
+
+* `distribution/debian/fiels` file. This is generated on each build and will therefore no longer be tracked.
+
 ## [0.2.0] - 2022-04-15
 
 ### Added
