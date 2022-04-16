@@ -1,8 +1,8 @@
 #!/bin/bash
 
 setup() {
-    load "../helpers/common"
-    common_setup
+    load "../helpers/unit"
+    unit_setup
 }
 
 @test "second test" {
