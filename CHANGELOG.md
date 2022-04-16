@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 * Main application "options" to list of suggestions for auto-completion.
+* [Bats](https://github.com/bats-core/bats-core) testing framework and initialised a testing setup.
 
 ### Removed
 
