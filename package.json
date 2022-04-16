@@ -4,6 +4,6 @@
         "bats-assert": "^2.0.0"
     },
     "scripts": {
-        "test": "./node_modules/.bin/bats tests/*"
+        "test": "./node_modules/.bin/bats tests/*/**"
     }
 }
