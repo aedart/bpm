@@ -22,3 +22,7 @@ tests/_output/*
 
 # Ignore internal todo-list
 .todo.md
+
+# Ignore temp. play file / scratch file
+tmp
+tmp.sh
