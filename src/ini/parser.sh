@@ -94,12 +94,12 @@ ini::parse() {
         local key=
         key=$('ini::_resolve_key' "$line")
 
-        # TODO: Clean, trim, sanitise this ...
-        value=$(echo ${line#*=} | sed 's/^ *\| *$//g')
+        local value=
+        value=$('ini::_resolve_value' "$line")
 
         # Add key-value pair to section
         # shellcheck disable=SC2034
-        section[$key]=$value
+        section["$key"]=$value
     done
 
     return 0
@@ -156,7 +156,9 @@ ini::assert_valid_name() {
 }
 
 ##
-# Assert given key is valid
+# Assert that given "normal" key is valid
+#
+# Normal in this context means a bare (not quoted key)
 #
 # Arguments:
 #   - string key
@@ -166,15 +168,58 @@ ini::assert_valid_name() {
 # Returns:
 #   - 1 if key is invalid
 #
-ini::assert_valid_key() {
+ini::assert_bare_key() {
     local key="$1"
     local msg=${2:-"Invalid key name: '${key}'"}
 
-    local regex='^[a-z0-9_.-]*$'
+    if [[ -z $key ]]; then
+        ini::_output_error "${msg}"
+        exit 1;
+    fi
+
+    # Prevent '@' from being used as a key name
+    if [[ $key == "@" ]]; then
+        # Use a slightly different error msg here...
+        ini::_output_error "@ cannot be used as a key name! - ${msg}"
+        exit 1;
+    fi
+
+    # Use same validation as toml, for bare key
+    local regex='^[A-Za-z0-9_-]*$'
     if [[ ! ${key} =~ $regex ]]; then
         ini::_output_error "${msg}"
         exit 1;
     fi
+}
+
+##
+# Assert that given "string" key is valid
+#
+# Arguments:
+#   - string key
+#   - string message [optional]
+# Outputs:
+#   - Writes to stderr if key is invalid
+# Returns:
+#   - 1 if key is invalid
+#
+ini::assert_string_key() {
+    local key="$1"
+    local msg=${2:-"Invalid key name: '${key}'"}
+
+    if [[ -z $key ]]; then
+        ini::_output_error "${msg}"
+        exit 1;
+    fi
+
+    # Prevent '@' from being used as a key name
+    if [[ $key == "@" ]]; then
+        ini::_output_error "@ cannot be used as a key name! - ${msg}"
+        exit 1;
+    fi
+
+    # Other than the above, a string key may contains whatever character is
+    # desired...
 }
 
 # ------------------------------------------------------------------------
@@ -190,7 +235,7 @@ ini::assert_valid_key() {
 #   - writes to stderr
 #
 ini::_output_error() {
-    echo "$*" >&2;
+    echo -e "$*" >&2;
 }
 
 ##
@@ -341,12 +386,44 @@ ini::_resolve_key() {
     # Obtain the key
     local key="${line%%=*}"
 
-    # trim and lowercase key
-    key=$('str::trim' "$key" | tr '[:upper:]' '[:lower:]')
+    # trim key
+    key=$('str::trim' "$key")
 
-    # Validate key name
-    ini::assert_valid_key "${key}" "Invalid key name '${key}', in line: ${line}"
+    # When key is a string, using double quotes or single quotes
+    local regex="^(\"|')"
+    if [[ $key =~ $regex ]]; then
+        # Remove double quotes
+        key="${key#\"}"
+        key="${key%\"}"
+
+        # Remove single quotes
+        key="${key#\'}"
+        key="${key%\'}"
+
+        # Assert string key
+        ini::assert_string_key "${key}" "Invalid key name '${key}', in line: ${line}"
+    else
+        # Otherwise it means that the key should follow a more strict
+        ini::assert_bare_key "${key}" "Invalid key name '${key}', in line: ${line}\nDouble or single quotes can perhaps be used for key name (@ is not included)."
+    fi
 
     # Finally, output resolved key
     echo "${key}";
+}
+
+# TODO:
+ini::_resolve_value() {
+    local line="$1"
+
+    # Obtain the value
+    local value="${line#*=}"
+
+    # Trim value
+    value=$('str::trim' "$value")
+
+    # Finally, output resolved value
+    echo "${value}"
+
+    # TODO: Clean, trim, sanitise this ...
+#    value=$(echo ${line#*=} | sed 's/^ *\| *$//g')
 }
