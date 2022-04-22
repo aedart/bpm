@@ -91,8 +91,10 @@ ini::parse() {
         local -n section=$section_name
 
         # Obtain key and value, trim leading and trailing whitespace
+        local key=
+        key=$('ini::_resolve_key' "$line")
+
         # TODO: Clean, trim, sanitise this ...
-        key=$(echo ${line%%=*} | sed 's/^ *\| *$//g') # TODO: lower case the key!!!
         value=$(echo ${line#*=} | sed 's/^ *\| *$//g')
 
         # Add key-value pair to section
@@ -148,6 +150,28 @@ ini::assert_valid_name() {
 
     local regex='^[a-zA-Z_][a-zA-Z0-9_]*$'
     if [[ ! ${name} =~ $regex ]]; then
+        ini::_output_error "${msg}"
+        exit 1;
+    fi
+}
+
+##
+# Assert given key is valid
+#
+# Arguments:
+#   - string key
+#   - string message [optional]
+# Outputs:
+#   - Writes to stderr if key is invalid
+# Returns:
+#   - 1 if key is invalid
+#
+ini::assert_valid_key() {
+    local key="$1"
+    local msg=${2:-"Invalid key name: '${key}'"}
+
+    local regex='^[a-z0-9_.-]*$'
+    if [[ ! ${key} =~ $regex ]]; then
         ini::_output_error "${msg}"
         exit 1;
     fi
@@ -298,4 +322,31 @@ ini::_resolve_section_name() {
 
     # Finally, output the section name with given name...
     echo "${prefix}_${section_name}"
+}
+
+##
+# Resolves the key from given line
+#
+# Arguments:
+#   - line from ini file
+# Outputs:
+#   - Writes resolved key to stdout
+#   - Writes error to stderr, if key name is invalid
+# Returns:
+#   - 1 on invalid key
+#
+ini::_resolve_key() {
+    local line="$1"
+
+    # Obtain the key
+    local key="${line%%=*}"
+
+    # trim and lowercase key
+    key=$('str::trim' "$key" | tr '[:upper:]' '[:lower:]')
+
+    # Validate key name
+    ini::assert_valid_key "${key}" "Invalid key name '${key}', in line: ${line}"
+
+    # Finally, output resolved key
+    echo "${key}";
 }
