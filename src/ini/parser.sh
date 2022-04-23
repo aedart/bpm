@@ -99,8 +99,49 @@ ini::parse() {
 
         # Add key-value pair to section
         # shellcheck disable=SC2034
-        section["$key"]=$value
+        section["${key}"]=$value
     done
+
+    return 0
+}
+
+##
+# Determine if key is a "string" key (double or single quoted key)
+#
+# Arguments:
+#   - key name
+# Returns:
+#   - 0 = true, if key is a string key
+#   - 1 = false, if key is not a string key
+#
+ini::is_string_key() {
+    local key="$1"
+
+    # When key is a string, using double quotes or single quotes
+    local regex="^(\"|')"
+    if [[ $key =~ $regex ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+##
+# Determine if key is a "bare" key
+# (NOT double or single quoted)
+#
+# Arguments:
+#   - key name
+# Returns:
+#   - 0 = true, if key is a bare key
+#   - 1 = false, if key is not a bare key
+#
+ini::is_bare_key() {
+    local key="$1"
+
+    if ini::is_string_key "${key}"; then
+        return 1
+    fi
 
     return 0
 }
@@ -389,9 +430,8 @@ ini::_resolve_key() {
     # trim key
     key=$('str::trim' "$key")
 
-    # When key is a string, using double quotes or single quotes
-    local regex="^(\"|')"
-    if [[ $key =~ $regex ]]; then
+    # Remove quotes if key is of type "string key"
+    if ini::is_string_key "${key}"; then
         # Remove double quotes
         key="${key#\"}"
         key="${key%\"}"
