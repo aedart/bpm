@@ -197,16 +197,16 @@ ini::assert_valid_name() {
 }
 
 ##
-# Assert that given "normal" key is valid
+# Assert that given "bare" key is valid
 #
-# Normal in this context means a bare (not quoted key)
+# "Bare" in this context means a bare (not quoted key)
 #
 # Arguments:
 #   - string key
 #   - string message [optional]
 # Outputs:
 #   - Writes to stderr if key is invalid
-# Returns:
+# Exits:
 #   - 1 if key is invalid
 #
 ini::assert_bare_key() {
@@ -225,8 +225,8 @@ ini::assert_bare_key() {
         exit 1;
     fi
 
-    # Use same validation as toml, for bare key
-    local regex='^[A-Za-z0-9_-]*$'
+    # A bare key allows alpha-numeric characters, underscore, dash and dot.
+    local regex='^[a-zA-Z0-9_\-\.]*$'
     if [[ ! ${key} =~ $regex ]]; then
         ini::_output_error "${msg}"
         exit 1;
@@ -241,7 +241,7 @@ ini::assert_bare_key() {
 #   - string message [optional]
 # Outputs:
 #   - Writes to stderr if key is invalid
-# Returns:
+# Exits:
 #   - 1 if key is invalid
 #
 ini::assert_string_key() {
@@ -287,8 +287,7 @@ ini::_output_error() {
 # Outputs:
 #   - writes default name to stdout
 #   - writes to stderr when path to file is not provided
-# Returns:
-#   - 0 on success
+# Exists:
 #   - 1 on failure
 #
 ini::_resolve_default_prefix() {
@@ -443,6 +442,13 @@ ini::_resolve_key() {
         # Assert string key
         ini::assert_string_key "${key}" "Invalid key name '${key}', in line: ${line}"
     else
+
+#        local regex='^[a-zA-Z0-9_\-\.]*$'
+#        if [[ "${key}" =~ $regex ]]; then
+#            ini::_output_error "SHOULD BE OKAY: ${key}"
+#            exit 1;
+#        fi
+
         # Otherwise it means that the key should follow a more strict
         ini::assert_bare_key "${key}" "Invalid key name '${key}', in line: ${line}\nDouble or single quotes can perhaps be used for key name (@ is not included)."
     fi
