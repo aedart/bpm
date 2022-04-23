@@ -460,9 +460,70 @@ ini::_resolve_value() {
     # Trim value
     value=$('str::trim' "$value")
 
+    # Handle string value - double quoted
+    local double_quoted_regex="^\""
+    if [[ $value =~ $double_quoted_regex ]]; then
+        # Extract value between quotes
+        value=$('ini::_extract_string_between_quotes' "${value}")
+
+        # Edge case, if value contains escaped double quotes, then
+        # these must be replaced with ASCII character 42, so they
+        # can be printed.
+        value="${value//\\\"/\\042}"
+
+        # Output escaped characters
+        echo -e "${value}"
+        return 0
+    fi
+
+    # Handle string value - single quoted
+    local single_quoted_regex="^'"
+    if [[ $value =~ $single_quoted_regex ]]; then
+        # Extract value between quotes
+        value=$('ini::_extract_string_between_quotes' "${value}")
+
+        # TODO: Edge case for escaped single quotes?
+
+        # Output value as is. We do NOT print escaped characters for
+        # single quoted string.
+        echo "${value}"
+        return 0
+    fi
+
+    # TODO: Handle other value type
+
+    # Remove inline comments. This means that if the value is not quoted,
+    # then no mercy will be given - we strip off anything that looks like
+    # a comment.
+    value="${value%%\;*}"
+    value="${value%%\#*}"
+
     # Finally, output resolved value
     echo "${value}"
+}
 
-    # TODO: Clean, trim, sanitise this ...
-#    value=$(echo ${line#*=} | sed 's/^ *\| *$//g')
+##
+# Extracts string value between quotes (double or single quotes)
+#
+# Arguments:
+#   - Quoted value
+# Outputs:
+#   - Writes value to stdout
+#
+ini::_extract_string_between_quotes() {
+    local value="$1"
+
+    # Extract string value between quotes
+    # TODO: This is still wrong - "my value "here" " ->  my value "here" | fine, but quotes
+    # TODO: are not escaped and should therefore have stopped at (my value ) !!! "here" SHOULD
+    # TODO: NOT be part of the value then!
+    # TODO: BUT, if quotes were escaped, then entire string should be extracted! E.g. "my value \"here\" ",
+    # TODO: should result in (my value \"here\")
+    local extracted=
+    extracted=$(echo "${value}" | sed -r "s/^([\"\'])(.*)\1.*/\2/")
+
+    # trim value
+    extracted=$('str::trim' "$extracted")
+
+    echo "${extracted}"
 }
