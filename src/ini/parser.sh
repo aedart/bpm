@@ -442,13 +442,6 @@ ini::_resolve_key() {
         # Assert string key
         ini::assert_string_key "${key}" "Invalid key name '${key}', in line: ${line}"
     else
-
-#        local regex='^[a-zA-Z0-9_\-\.]*$'
-#        if [[ "${key}" =~ $regex ]]; then
-#            ini::_output_error "SHOULD BE OKAY: ${key}"
-#            exit 1;
-#        fi
-
         # Otherwise it means that the key should follow a more strict
         ini::assert_bare_key "${key}" "Invalid key name '${key}', in line: ${line}\nDouble or single quotes can perhaps be used for key name (@ is not included)."
     fi
