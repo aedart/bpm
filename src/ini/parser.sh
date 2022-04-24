@@ -463,7 +463,17 @@ ini::_resolve_key() {
     echo "${key}";
 }
 
-# TODO:
+##
+# Resolves value from given line
+#
+# Arguments:
+#   - line from ini file
+# Outputs:
+#   - Writes resolved value to stdout
+#   - Writes error to stderr, if value is malformed or otherwise invalid
+# Returns:
+#   - 1 on invalid value
+#
 ini::_resolve_value() {
     local line="$1"
 
@@ -499,7 +509,9 @@ ini::_resolve_value() {
     # Handle string value - single quoted
     local single_quoted_regex="^'"
     if [[ $value =~ $single_quoted_regex ]]; then
-        # TODO: Edge case for escaped single quotes?
+        # Edge case, if value contains escaped single quotes, then
+        # these must be replaced with ASCII character 47.
+        value="${value//\\\'/\\047}"
 
         # Fail if value does not have correct start and end quotes
         ini::_assert_has_correct_amount_quotes "'" "${value}" "${line}"
@@ -507,7 +519,10 @@ ini::_resolve_value() {
         # Extract value between quotes
         value=$('ini::_extract_string_between_quotes' "${value}" "'")
 
-        # TODO: replace the ASCII single quotes back again. Single quoted strings will not print escaped characters!
+        # The value is at this point almost ready to be used. However evt.
+        # ASCII single quotes must be converted back. Any other escaped character
+        # will NOT be resolved.
+        value="${value//\\047/\'}"
 
         # Output value as is. We do NOT print escaped characters for
         # single quoted string.
@@ -525,6 +540,9 @@ ini::_resolve_value() {
     # a comment.
     value="${value%%\;*}"
     value="${value%%\#*}"
+
+    # (Re)trim the value, in case of any trailing whitespace after the value.
+    value=$('str::trim' "${value}")
 
     # Finally, output resolved value
     echo "${value}"
@@ -555,7 +573,7 @@ ini::_extract_string_between_quotes() {
     # in order, before invoking this method.
     #    # Fail position not found
     #    if [[ $position -eq '-1' || $position -eq '0' ]]; then
-    #        ini::_output_error "Unable to extract value from quotes, in xxxx"
+    #        ini::_output_error "Unable to extract value from quotes, in line..."
     #        exit 1
     #    fi
 
