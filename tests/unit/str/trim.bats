@@ -4,8 +4,6 @@ setup() {
     load "../../helpers/unit"
     unit_setup
 
-    export INI_FILES_DIR="$TEST_DATA_DIR/ini"
-
     # Source in the trim method
     source "${PROJECT_ROOT}/src/str/trim.sh"
 
