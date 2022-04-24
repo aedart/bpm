@@ -71,6 +71,8 @@ ini::parse() {
 
         line=$('str::trim' "${line}")
 
+        # ------------------------------------------------------------------------
+
         # Resolve section name, if line contains such.
         # If section name is invalid, then script fails.
         if ini::_is_line_a_section "${line}"; then
@@ -90,6 +92,8 @@ ini::parse() {
         # Create a local reference to the section
         local -n section=$section_name
 
+        # ------------------------------------------------------------------------
+
         # Obtain key and value, trim leading and trailing whitespace
         local key=
         key=$('ini::_resolve_key' "$line")
@@ -99,7 +103,7 @@ ini::parse() {
 
         # Add key-value pair to section
         # shellcheck disable=SC2034
-        section["${key}"]=$value
+        section["${key}"]="${value}"
     done
 
     return 0
@@ -218,12 +222,16 @@ ini::assert_bare_key() {
         exit 1;
     fi
 
+    # ------------------------------------------------------------------------
+
     # Prevent '@' from being used as a key name
     if [[ $key == "@" ]]; then
         # Use a slightly different error msg here...
         ini::_output_error "@ cannot be used as a key name! - ${msg}"
         exit 1;
     fi
+
+    # ------------------------------------------------------------------------
 
     # A bare key allows alpha-numeric characters, underscore, dash and dot.
     local regex='^[a-zA-Z0-9_\-\.]*$'
@@ -253,11 +261,15 @@ ini::assert_string_key() {
         exit 1;
     fi
 
+    # ------------------------------------------------------------------------
+
     # Prevent '@' from being used as a key name
     if [[ $key == "@" ]]; then
         ini::_output_error "@ cannot be used as a key name! - ${msg}"
         exit 1;
     fi
+
+    # ------------------------------------------------------------------------
 
     # Other than the above, a string key may contains whatever character is
     # desired...
@@ -460,29 +472,35 @@ ini::_resolve_value() {
     # Trim value
     value=$('str::trim' "$value")
 
+    # ------------------------------------------------------------------------
+
     # Handle string value - double quoted
     local double_quoted_regex="^\""
     if [[ $value =~ $double_quoted_regex ]]; then
-        # Extract value between quotes
-        value=$('ini::_extract_string_between_quotes' "${value}")
-
         # Edge case, if value contains escaped double quotes, then
         # these must be replaced with ASCII character 42, so they
         # can be printed.
         value="${value//\\\"/\\042}"
+
+        # Extract value between quotes
+        value=$('ini::_extract_string_between_quotes' "${value}")
 
         # Output escaped characters
         echo -e "${value}"
         return 0
     fi
 
+    # ------------------------------------------------------------------------
+
     # Handle string value - single quoted
     local single_quoted_regex="^'"
     if [[ $value =~ $single_quoted_regex ]]; then
+        # TODO: Edge case for escaped single quotes?
+
         # Extract value between quotes
         value=$('ini::_extract_string_between_quotes' "${value}")
 
-        # TODO: Edge case for escaped single quotes?
+        # TODO: replace the ASCII single quotes back again. Single quoted strings will not print escaped characters!
 
         # Output value as is. We do NOT print escaped characters for
         # single quoted string.
@@ -490,7 +508,10 @@ ini::_resolve_value() {
         return 0
     fi
 
-    # TODO: Handle other value type
+    # ------------------------------------------------------------------------
+
+    # If value wasn't a quoted string, then we process it as well as possible.
+    # Escaped characters will not be dealt with here.
 
     # Remove inline comments. This means that if the value is not quoted,
     # then no mercy will be given - we strip off anything that looks like
