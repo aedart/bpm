@@ -15,7 +15,7 @@ setup() {
 
 @test "Can trim string" {
     # Run
-    run str::trim " Hi there... "
+    run str::trim "   Hi there...   "
 
     # Assert
     assert_success

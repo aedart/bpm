@@ -26,6 +26,14 @@
 str::trim() {
     local str="$1"
 
-    # shellcheck disable=SC2001
-    echo "${str}" | sed 's/^ *\| *$//g'
+    shopt -s extglob
+
+    # Remove leading and trailing whitespaces
+    str="${str##*( )}"
+    str="${str%%*( )}"
+
+    # Alternative, but very slow, because we need to pipe...
+    # echo "${str}" | sed 's/^ *\| *$//g'
+
+    echo "$str"
 }
