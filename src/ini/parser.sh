@@ -412,7 +412,8 @@ ini::_resolve_section_name() {
     section_name="${section_name/]/ }"
 
     # Trim and lower case
-    section_name=$('str::trim' "$section_name" | tr '[:upper:]' '[:lower:]')
+    section_name=$('str::trim' "$section_name")
+    section_name="${section_name,,}"
 
     # Validate
     ini::assert_valid_name "${section_name}" "Invalid section name: ${line}"
