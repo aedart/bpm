@@ -482,6 +482,9 @@ ini::_resolve_value() {
         # can be printed.
         value="${value//\\\"/\\042}"
 
+        # Fail if value does not have correct start and end double quotes
+        ini::_assert_has_correct_amount_quotes '"' "${value}" "${line}"
+
         # Extract value between quotes
         value=$('ini::_extract_string_between_quotes' "${value}")
 
@@ -496,6 +499,9 @@ ini::_resolve_value() {
     local single_quoted_regex="^'"
     if [[ $value =~ $single_quoted_regex ]]; then
         # TODO: Edge case for escaped single quotes?
+
+        # Fail if value does not have correct start and end quotes
+        ini::_assert_has_correct_amount_quotes "'" "${value}" "${line}"
 
         # Extract value between quotes
         value=$('ini::_extract_string_between_quotes' "${value}")
@@ -521,6 +527,7 @@ ini::_resolve_value() {
 
     # Finally, output resolved value
     echo "${value}"
+    return 0
 }
 
 ##
@@ -547,4 +554,30 @@ ini::_extract_string_between_quotes() {
     extracted=$('str::trim' "$extracted")
 
     echo "${extracted}"
+}
+
+##
+# Assert that string value has correct amount of quotes (start and end quote)
+#
+# Arguments:
+#   - string quote symbol, e.g. double quote (") or single quote (')
+#   - string value
+#   - line from ini file (used for error message
+# Outputs:
+#   - Writes to stderr if value is not quoted correctly
+# Exists:
+#   - 1 if value is not quoted correctly
+#
+ini::_assert_has_correct_amount_quotes() {
+    local quote_symbol="$1"
+    local value="$2"
+    local line="$3"
+
+    local extracted="${value//[^${quote_symbol}]}"
+    local amount="${#extracted}"
+
+    if [[ $amount -ne 2 ]]; then
+        ini::_output_error "Invalid string value. Start or end quote (${quote_symbol}) is missing, in line: ${line}"
+        exit 1
+    fi
 }
