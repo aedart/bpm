@@ -486,7 +486,7 @@ ini::_resolve_value() {
         ini::_assert_has_correct_amount_quotes '"' "${value}" "${line}"
 
         # Extract value between quotes
-        value=$('ini::_extract_string_between_quotes' "${value}")
+        value=$('ini::_extract_string_between_quotes' "${value}" '"')
 
         # Output escaped characters
         echo -e "${value}"
@@ -504,7 +504,7 @@ ini::_resolve_value() {
         ini::_assert_has_correct_amount_quotes "'" "${value}" "${line}"
 
         # Extract value between quotes
-        value=$('ini::_extract_string_between_quotes' "${value}")
+        value=$('ini::_extract_string_between_quotes' "${value}" "'")
 
         # TODO: replace the ASCII single quotes back again. Single quoted strings will not print escaped characters!
 
@@ -535,25 +535,43 @@ ini::_resolve_value() {
 #
 # Arguments:
 #   - Quoted value
+#   - Quoted symbol [optional] Defaults to double quote (")
 # Outputs:
 #   - Writes value to stdout
 #
 ini::_extract_string_between_quotes() {
     local value="$1"
+    local symbol="${2:-\"}"
 
-    # Extract string value between quotes
-    # TODO: This is still wrong - "my value "here" " ->  my value "here" | fine, but quotes
-    # TODO: are not escaped and should therefore have stopped at (my value ) !!! "here" SHOULD
-    # TODO: NOT be part of the value then!
-    # TODO: BUT, if quotes were escaped, then entire string should be extracted! E.g. "my value \"here\" ",
-    # TODO: should result in (my value \"here\")
-    local extracted=
-    extracted=$(echo "${value}" | sed -r "s/^([\"\'])(.*)\1.*/\2/")
+    # Replace the first matching quote (start quote)
+    local extracted="${value/[${symbol}]/}"
+
+    # Find position of the end quote
+    local position=
+    position=$('str::pos' "${extracted}" "${symbol}")
+
+    # A different method should already ensure that start and end quotes are
+    # in order, before invoking this method.
+    #    # Fail position not found
+    #    if [[ $position -eq '-1' || $position -eq '0' ]]; then
+    #        ini::_output_error "Unable to extract value from quotes, in xxxx"
+    #        exit 1
+    #    fi
+
+    # Extract the value from the beginning until position of the end quote.
+    local length="$position"
+    extracted="${extracted:0:${length}}"
 
     # trim value
     extracted=$('str::trim' "$extracted")
 
     echo "${extracted}"
+
+    # An alternative version seem also to work. Yet, it does not behave
+    # entirely as expected and the solution also introduces another pipe
+    # operation, which could impact performance...
+    #    local extracted=
+    #    extracted=$(echo "${value}" | sed -r "s/^([\"\'])(.*)\1.*/\2/")
 }
 
 ##
