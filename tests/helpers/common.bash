@@ -38,4 +38,7 @@ common_setup() {
     # Export paths to "data" and "output" directories, for all tests.
     export TEST_DATA_DIR="$PROJECT_ROOT/tests/_data"
     export TEST_OUTPUT_DIR="$PROJECT_ROOT/tests/_output"
+
+    # Output test file that currently executing...
+#    echo "$BATS_TEST_FILENAME" >&3
 }
