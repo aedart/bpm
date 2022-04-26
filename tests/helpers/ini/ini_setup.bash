@@ -28,6 +28,8 @@ ini_setup() {
     export INI_FILES_DIR="$TEST_DATA_DIR/ini"
 
     # Source in the ini reader
+    source "${PROJECT_ROOT}/src/str/pos.sh"
+    source "${PROJECT_ROOT}/src/str/trim.sh"
     source "${PROJECT_ROOT}/src/ini/parser.sh"
 
     # Debug
