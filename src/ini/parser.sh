@@ -15,7 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-# TODO
+##
+# Parse given ini file into a series of arrays
+#
+# TODO: Add short description and example of how this works...
+#
+# Arguments:
+#   - Path to ini file
+#   - [optional] Name of array to hold parsed "sections" (list of names, each corresponding to
+#     an array variable). Defaults to filename without extension.
+#   - [optional] Name of the "default" section
+# Outputs:
+#   - Writes to stderr when unable to parse ini file
+# Returns:
+#   - 0 successful parsing of ini file
+# Exits:
+#   - 1 on failure
+#
 ini::parse() {
     # Abort if no arguments are given
     if [[ $# -eq 0 ]]; then
@@ -246,7 +262,7 @@ ini::assert_bare_key() {
 #
 # Arguments:
 #   - string key
-#   - string message [optional]
+#   - [optional] string message
 # Outputs:
 #   - Writes to stderr if key is invalid
 # Exits:
@@ -554,7 +570,7 @@ ini::_resolve_value() {
 #
 # Arguments:
 #   - Quoted value
-#   - Quoted symbol [optional] Defaults to double quote (")
+#   - [optional] Quoted symbol. Defaults to double quote (")
 # Outputs:
 #   - Writes value to stdout
 #
