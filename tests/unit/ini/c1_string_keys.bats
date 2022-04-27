@@ -58,3 +58,11 @@ setup() {
     # Assert
     assert [ "${keys_default['special -_- @ STRING : .key?']+_}" ]
 }
+
+@test "Trims string keys" {
+    # Run (in same process)
+    ini::parse "${INI_FILES_DIR}/keys.ini"
+
+    # Assert
+    assert [ "${keys_default['trimmed']+_}" ]
+}
