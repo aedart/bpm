@@ -250,7 +250,7 @@ ini::assert_bare_key() {
     # ------------------------------------------------------------------------
 
     # A bare key allows alpha-numeric characters, underscore, dash and dot.
-    local regex='^[a-zA-Z0-9_\-\.]*$'
+    local regex='^[a-zA-Z0-9_\.\\-]*$'
     if [[ ! ${key} =~ $regex ]]; then
         ini::_output_error "${msg}"
         exit 1;
