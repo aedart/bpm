@@ -514,7 +514,7 @@ ini::_resolve_value() {
         value="${value//\\\"/\\042}"
 
         # Fail if value does not have correct start and end double quotes
-        ini::_assert_has_correct_amount_quotes '"' "${value}" "${line}" || exit 1
+        ini::_assert_has_correct_amount_quotes '"' "${value}" "${line}"
 
         # Extract value between quotes
         value=$('ini::_extract_string_between_quotes' "${value}" '"')
@@ -534,7 +534,7 @@ ini::_resolve_value() {
         value="${value//\\\'/\\047}"
 
         # Fail if value does not have correct start and end quotes
-        ini::_assert_has_correct_amount_quotes "'" "${value}" "${line}" || exit 1
+        ini::_assert_has_correct_amount_quotes "'" "${value}" "${line}"
 
         # Extract value between quotes
         value=$('ini::_extract_string_between_quotes' "${value}" "'")
