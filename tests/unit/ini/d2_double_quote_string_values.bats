@@ -54,15 +54,8 @@ setup() {
     # Assert
     assert [ "${values_default['escaped']+_}" ]
 
-    # This will naturally NOT work
-#    assert_equal "${values_default['escaped']}" "\tValue with\nescaped \\characters"
-
-    # Compare md5 checksum instead...
     local expected=
-    expected=$(echo -e "\tValue with\nescaped \\\characters" | md5sum)
+    expected=$(echo -e "\tValue with\nescaped \\\characters")
 
-    local actual=
-    actual=$(echo "${values_default['escaped']}" | md5sum)
-
-    assert_equal "${expected}" "${actual}"
+    assert_equal "${expected}" "${values_default['escaped']}"
 }
