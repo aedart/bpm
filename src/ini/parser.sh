@@ -92,7 +92,7 @@ ini::parse() {
         # Resolve section name, if line contains such.
         # If section name is invalid, then script fails.
         if ini::_is_line_a_section "${line}"; then
-            section_name=$('ini::_resolve_section_name' "${line}" "${name}")
+            section_name=$('ini::_resolve_section_name' "${line}" "${name}") || exit 1
             continue;
         fi
 
