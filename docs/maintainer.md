@@ -1,6 +1,7 @@
 # Maintainer Notes
 
 This document serves as _preliminary_ internal documentation and notes for "bashy" maintainers.
+It is far from complete and a more finalised version will be manifested, when time permits it.
 
 ## Prerequisites
 
@@ -12,6 +13,15 @@ sudo apt install shellcheck
 ```
 
 **Note**: _Not sure about `devscripts`..._
+
+### Node + npm
+
+Since this application relies on [bats](https://github.com/bats-core/bats-core), you will need to have the latest stable version of node and npm installed.
+Afterwards, you need to run:
+
+```console
+npm install
+```
 
 ## How to build
 
@@ -37,6 +47,12 @@ sudo dpkg -i .build/distributions/debian/bpm_*.deb
 
 ```bash
 sudo dpkg -r bpm
+```
+
+## How to run tests
+
+```console
+npm run test
 ```
 
 ## Code Style Guide
