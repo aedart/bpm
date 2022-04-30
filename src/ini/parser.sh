@@ -18,7 +18,33 @@
 ##
 # Parse given ini file into a series of arrays
 #
-# TODO: Add short description and example of how this works...
+# Given an ini file that looks like this:
+# ```ini
+# ; E.g. person.ini
+# name = Tim
+#
+# [ contact ]
+# email = 'tim@example.org'
+# work_email = 'tim@acme.org'
+# ```
+#
+# When parsing the ini file, as shown here:
+# ```bash
+# ini::parse "person.ini"
+# ```
+#
+# Then 3 arrays will be created globally:
+# ```bash
+# # First array contains names of all "section arrays"
+# echo ${person[@]} # 'person_default' 'person_contact'
+#
+# # Second array is the "default" section, which holds "name"
+# echo ${person_default['name']} # Time
+#
+# # Third and last array holds the "contact" section
+# echo ${person_contact['email']} # 'tim@example.org'
+# echo ${person_contact['work_email']} # 'tim@acme.org'
+# ```
 #
 # Arguments:
 #   - Path to ini file
