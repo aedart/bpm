@@ -10,6 +10,6 @@ Vcs-Git: https://github.com/aedart/bpm.git
 
 Package: bpm
 Architecture: all
-Depends: bash (>= 5.0), git
+Depends: bash (>= 5.0), git (>= 2.25), sed (>= 4.7), coreutils (>= 8.30)
 Description: Bashy Package Manager
  An opinionated package manager for your bash scripts.
