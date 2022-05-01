@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2022-05-01
+
 ### Added
 
+* `ini/parser.sh` a utility to parse contents of ini files into arrays.
 * Main application "options" to list of suggestions for auto-completion.
 * [Bats](https://github.com/bats-core/bats-core) testing framework and initialised a testing setup.
 * `str/trim.sh` string trim utility.
@@ -16,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-* `distribution/debian/fiels` file. This is generated on each build and will therefore no longer be tracked.
+* `distribution/debian/files` file. This is generated on each build and will therefore no longer be tracked.
 
 ## [0.2.0] - 2022-04-15
 
@@ -45,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `bin/build-version` helper to build a `version` text file
 * `docs/maintainer` preliminary maintainer documentation
 
-[unreleased]: https://github.com/aedart/bashy/compare/0.2.0...HEAD
+[unreleased]: https://github.com/aedart/bashy/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/aedart/bashy/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/aedart/bashy/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/aedart/bashy/releases/tag/0.1.0

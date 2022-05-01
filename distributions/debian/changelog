@@ -1,3 +1,14 @@
+bpm (0.3.0) unstable; urgency=low
+
+    * Added `ini/parser.sh` a utility to parse contents of ini files into arrays.
+    * Added Main application "options" to list of suggestions for auto-completion.
+    * Added [Bats](https://github.com/bats-core/bats-core) testing framework and initialised a testing setup.
+    * Added `str/trim.sh` string trim utility.
+    * Added `str/pos.sh` string character position utility.
+    * Removed `distribution/debian/files` file. This is generated on each build and will therefore no longer be tracked.
+
+ -- Alin Eugen Deac <aedart@gmail.com>  Sun, 01 May 2022 13:50:00 +0200
+
 bpm (0.2.0) unstable; urgency=low
 
     * Added Bash auto-completion for `bpm` binary.
