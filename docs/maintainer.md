@@ -50,6 +50,16 @@ sudo dpkg -i .build/distributions/debian/bpm_*.deb
 sudo dpkg -r bpm
 ```
 
+## Increment Debian changelog
+
+```bash
+cd distributions
+dch -i
+```
+
+See [guide](https://wiki.debian.org/AdvancedBuildingTips) for more information.
+Also `dch --help` might be useful!
+
 ## How to run tests
 
 ```console
