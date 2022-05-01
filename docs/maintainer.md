@@ -26,6 +26,7 @@ npm install
 ## How to build
 
 To build the debian package, run the following.
+(_from the root of the project!_)
 
 ```bash
 ./bin/build
