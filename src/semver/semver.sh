@@ -30,7 +30,7 @@
 # ------------------------------------------------------------------------
 
 # Unfortunately, bash only supports "Extended Regular Expressions (ERE)".
-# It offers no support for "Perl-compatible regular expressions (PCRE)".
+# Thus, no builtin support for "Perl-compatible regular expressions (PCRE)".
 # Therefore, a custom regex is made, based on the following:
 #
 # Original: ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
@@ -79,11 +79,11 @@ semver::is_valid() {
 # semver::parse "1.2.3-alpha.1+exp.sha.5114f85" "my_version_array"
 #
 # echo "version: ${my_version_array['version']}"
-# echo "major ${my_version_array['major']}"
-# echo "minor ${my_version_array['minor']}"
-# echo "patch ${my_version_array['patch']}"
-# echo "pre-release ${my_version_array['pre_release']}"
-# echo "build meta-data ${my_version_array['build_meta']}"
+# echo "major: ${my_version_array['major']}"
+# echo "minor: ${my_version_array['minor']}"
+# echo "patch: ${my_version_array['patch']}"
+# echo "pre-release: ${my_version_array['pre_release']}"
+# echo "build meta-data: ${my_version_array['build_meta']}"
 # ```
 #
 # Globals:
