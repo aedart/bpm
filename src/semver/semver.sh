@@ -198,7 +198,7 @@ semver::compare() {
     local pre_release_a="${version_a['pre_release']}"
     local pre_release_b="${version_b['pre_release']}"
 
-    # Early out - if neither a not b have pre-release identifiers...
+    # Early out - if neither a nor b have pre-release identifiers...
     if [[ -z "${pre_release_a}" && -z "${pre_release_b}" ]]; then
         echo $A_EQUALS_B
         exit 0
