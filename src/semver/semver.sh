@@ -141,14 +141,14 @@ semver::compare() {
         exit 1
     fi
 
-    # Arrays to hold the parsed versions
-    local -A version_a=()
-    local -A version_b=()
-
-    # Output symbols (for the sake of readability)
+    # Compare output values (for the sake of readability)
     local -r A_LESS_THAN_B='-1'
     local -r A_EQUALS_B='0'
     local -r A_GREATER_THAN_B='1'
+
+    # Arrays to hold the parsed versions
+    local -A version_a=()
+    local -A version_b=()
 
     # Parse and populate local version arrays
     semver::parse "$1" "version_a"
