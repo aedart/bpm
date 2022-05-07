@@ -135,12 +135,6 @@ semver::parse() {
 # TODO: 0: a equals b (a = b)
 # TODO: 1: a greater than b (a > b)
 semver::compare() {
-    # Fail if incorrect amount of arguments are provided
-    if [[ $# -ne 2 ]]; then
-        semver::_output_error "Incorrect number of arguments. Compare method needs two version strings"
-        return 1
-    fi
-
     # Compare output values (for the sake of readability)
     local -r A_LESS_THAN_B='-1'
     local -r A_EQUALS_B='0'
