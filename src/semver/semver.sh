@@ -161,7 +161,7 @@ semver::compare() {
     # in accordance to Semantic Versioning 2.0.0 standard. Yet, its okay here...
     if [[ "${version_a['version']}" == "${version_b['version']}" ]]; then
         echo $A_EQUALS_B
-        exit 0
+        return 0
     fi
 
     # ------------------------------------------------------------------------
@@ -182,13 +182,13 @@ semver::compare() {
         # When a is less than b
         if [[ $vA < $vB ]]; then
             echo $A_LESS_THAN_B
-            exit 0
+            return 0
         fi
 
         # When a is greater than b
         if [[ $vA > $vB ]]; then
             echo $A_GREATER_THAN_B
-            exit 0
+            return 0
         fi
 
         # Continue, to next version identifier when both are equal...
@@ -205,7 +205,7 @@ semver::compare() {
     # Early out - if neither a nor b have pre-release identifiers...
     if [[ -z "${pre_release_a}" && -z "${pre_release_b}" ]]; then
         echo $A_EQUALS_B
-        exit 0
+        return 0
     fi
 
     # "[...] When major, minor, and patch are equal, a pre-release version has
@@ -216,13 +216,13 @@ semver::compare() {
     # When a has pre-release, but b does not... E.g. (a) 1.0.0-alpha < (b) 1.0.0
     if [[ -n "${pre_release_a}" && -z "${pre_release_b}"  ]]; then
         echo $A_LESS_THAN_B
-        exit 0
+        return 0
     fi
 
     # When a has no pre-release, but b does... E.g. (a) 1.0.0 > (b) 1.0.0-alpha
     if [[ -z "${pre_release_a}" && -n "${pre_release_b}"  ]]; then
         echo $A_GREATER_THAN_B
-        exit 0
+        return 0
     fi
 
     # ------------------------------------------------------------------------
@@ -239,7 +239,7 @@ semver::compare() {
     # Finally, both version and pre-release identifiers are the same. Output
     # and exit accordingly.
     echo $A_EQUALS_B
-    exit 0
+    return 0
 }
 
 # ------------------------------------------------------------------------
