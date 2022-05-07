@@ -135,6 +135,12 @@ semver::parse() {
 # TODO: 0: a equals b (a = b)
 # TODO: 1: a greater than b (a > b)
 semver::compare() {
+    # Fail if incorrect amount of arguments are provided
+    if [[ $# -ne 2 ]]; then
+        semver::_output_error "Incorrect number of arguments. Compare method needs two version strings"
+        exit 1
+    fi
+
     # Arrays to hold the parsed versions
     local -A version_a=()
     local -A version_b=()
@@ -143,8 +149,6 @@ semver::compare() {
     local -r A_LESS_THAN_B='-1'
     local -r A_EQUALS_B='0'
     local -r A_GREATER_THAN_B='1'
-
-    # TODO: Fail if num. arguments is not exactly two!
 
     # Parse and populate local version arrays
     semver::parse "$1" "version_a"
