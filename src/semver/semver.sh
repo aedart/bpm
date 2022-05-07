@@ -138,7 +138,7 @@ semver::compare() {
     # Fail if incorrect amount of arguments are provided
     if [[ $# -ne 2 ]]; then
         semver::_output_error "Incorrect number of arguments. Compare method needs two version strings"
-        exit 1
+        return 1
     fi
 
     # Compare output values (for the sake of readability)
@@ -231,13 +231,69 @@ semver::compare() {
     # by comparing each dot separated identifier from left to right until a
     # difference is found [...]" (#spec-item-11.4)
 
-    # TODO: Split pre-releases by dot, into two arrays... loop identifiers
-    # TODO: and compare acc. to spec-item-11.4...
+    # Split pre-release identifiers into arrays, using dot as separator
+    read -r -a a_elements <<< "${pre_release_a//\./ }"
+    read -r -a b_elements <<< "${pre_release_b//\./ }"
+
+    # Ensure both pre-release arrays have equal amount of identifiers.
+    # Push zero (0) into either array that is smaller than the other.
+    # Note: "[...] Numeric identifiers always have lower precedence than
+    # non-numeric identifiers[...]" (#spec-item-11.4.3)
+    while [[ ${#a_elements[@]} < ${#b_elements[@]}  ]]; do
+        a_elements+=('0')
+    done
+    while [[ ${#b_elements[@]} < ${#a_elements[@]}  ]]; do
+        b_elements+=('0')
+    done
+
+    # Loop through pre-release identifiers, compare left to right.
+    local -r IS_NUMERIC="^[0-9]*$"
+    local -r IS_STRING="^[a-zA-Z-]*$"
+    for (( i = 0; i < "${#a_elements[@]}"; i++ )); do
+        local pA="${a_elements[$i]}"
+        local pB="${b_elements[$i]}"
+
+        # Debug
+        # echo "$pA vs. $pB"
+
+        # "[...] Numeric identifiers always have lower precedence than
+        # non-numeric identifiers [...]" (#spec-item-11.4.3)
+
+        # When a is numeric, but b is a string
+        if [[ $pA =~ $IS_NUMERIC && $pB =~ $IS_STRING  ]]; then
+            echo $A_LESS_THAN_B
+            return 0
+        fi
+
+        # When a is string, but b is a numeric
+        if [[ $pA =~ $IS_STRING && $pB =~ $IS_NUMERIC  ]]; then
+            echo $A_GREATER_THAN_B
+            return 0
+        fi
+
+        # From here on, we can simply compare the identifiers. If identifiers are
+        # numerical, bash compares them as numbers. And if identifiers are strings,
+        # then bash compares them using ASCII order. (#spec-item-11.4.1, #spec-item-11.4.2)
+
+        # When pre-release a is less than pre-lease b
+        if [[ $pA < $pB ]]; then
+            echo $A_LESS_THAN_B
+            return 0
+        fi
+
+        # When pre-release a is greater than pre-lease b
+        if [[ $pA > $pB ]]; then
+            echo $A_GREATER_THAN_B
+            return 0
+        fi
+
+        # Botch pre-release identifiers are the same, continue to next set...
+    done
 
     # ------------------------------------------------------------------------
 
     # Finally, both version and pre-release identifiers are the same. Output
-    # and exit accordingly.
+    # and return accordingly.
     echo $A_EQUALS_B
     return 0
 }
