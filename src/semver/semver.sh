@@ -36,13 +36,13 @@
 # Original: ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
 # Source: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
 
-declare -r SEMVER_DIGITS="(0|[1-9][0-9]*)"
-declare -r SEMVER_MAJOR=$SEMVER_DIGITS
-declare -r SEMVER_MINOR=$SEMVER_DIGITS
-declare -r SEMVER_PATCH=$SEMVER_DIGITS
-declare -r SEMVER_PRE_RELEASE="?(\\-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)*"
-declare -r SEMVER_BUILD_METADATA="?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
-declare -r SEMANTIC_VERSION_REGEX="^${SEMVER_MAJOR}\\.${SEMVER_MINOR}\\.${SEMVER_PATCH}${SEMVER_PRE_RELEASE}${SEMVER_BUILD_METADATA}"
+readonly SEMVER_DIGITS="(0|[1-9][0-9]*)"
+readonly SEMVER_MAJOR=$SEMVER_DIGITS
+readonly SEMVER_MINOR=$SEMVER_DIGITS
+readonly SEMVER_PATCH=$SEMVER_DIGITS
+readonly SEMVER_PRE_RELEASE="?(\\-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)*"
+readonly SEMVER_BUILD_METADATA="?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
+readonly SEMANTIC_VERSION_REGEX="^${SEMVER_MAJOR}\\.${SEMVER_MINOR}\\.${SEMVER_PATCH}${SEMVER_PRE_RELEASE}${SEMVER_BUILD_METADATA}"
 
 # ------------------------------------------------------------------------
 # Public methods
