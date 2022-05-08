@@ -285,16 +285,28 @@ semver::compare() {
         # numerical, bash compares them as numbers. And if identifiers are strings,
         # then bash compares them using ASCII order. (#spec-item-11.4.1, #spec-item-11.4.2)
 
-        # When pre-release a is less than pre-lease b
-        if [[ $pA < $pB ]]; then
-            echo $A_LESS_THAN_B
-            return 0
-        fi
+        # When both identifiers are strings, compare them using ASCII order (#spec-item-11.4.1, #spec-item-11.4.2)
+        if [[ $pA =~ $IS_STRING && $pB =~ $IS_STRING ]]; then
+            if [[ $pA < $pB ]]; then
+                echo $A_LESS_THAN_B
+                return 0
+            fi
 
-        # When pre-release a is greater than pre-lease b
-        if [[ $pA > $pB ]]; then
-            echo $A_GREATER_THAN_B
-            return 0
+            if [[ $pA > $pB ]]; then
+                echo $A_GREATER_THAN_B
+                return 0
+            fi
+        else
+            # Otherwise, identifiers are numeric...
+            if [[ $pA -lt $pB ]]; then
+                echo $A_LESS_THAN_B
+                return 0
+            fi
+
+            if [[ $pA -gt $pB ]]; then
+                echo $A_GREATER_THAN_B
+                return 0
+            fi
         fi
 
         # Botch pre-release identifiers are the same, continue to next set...
