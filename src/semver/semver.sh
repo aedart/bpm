@@ -161,8 +161,8 @@ semver::compare() {
     local -A version_b=()
 
     # Parse and populate local version arrays
-    semver::parse "$1" "version_a"
-    semver::parse "$2" "version_b"
+    semver::parse "$1" "version_a" || return 1
+    semver::parse "$2" "version_b" || return 1
 
     # ------------------------------------------------------------------------
 
