@@ -281,11 +281,8 @@ semver::compare() {
             return 0
         fi
 
-        # From here on, we can simply compare the identifiers. If identifiers are
-        # numerical, bash compares them as numbers. And if identifiers are strings,
-        # then bash compares them using ASCII order. (#spec-item-11.4.1, #spec-item-11.4.2)
-
-        # When both identifiers are strings, compare them using ASCII order (#spec-item-11.4.1, #spec-item-11.4.2)
+        # When both identifiers are strings, compare them using ASCII order
+        # (#spec-item-11.4.1, #spec-item-11.4.2)
         if [[ $pA =~ $IS_STRING && $pB =~ $IS_STRING ]]; then
             if [[ $pA < $pB ]]; then
                 echo $A_LESS_THAN_B
