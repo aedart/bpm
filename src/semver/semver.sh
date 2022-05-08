@@ -130,10 +130,26 @@ semver::parse() {
     return 1
 }
 
-# TODO:
-# TODO: -1: a less than b (a < b)
-# TODO: 0: a equals b (a = b)
-# TODO: 1: a greater than b (a > b)
+##
+# Compare two versions against each other
+#
+# Resulting difference is written to stdout, using numeric
+# values.
+#
+# Globals:
+#   - SEMANTIC_VERSION_REGEX
+# Arguments:
+#   - Version string a, e.g. "1.2.3-alpha.beta+exp.sha.5114f85"
+#   - Version string b, e.g. "1.2.3-alpha.1+exp.sha.6873f02"
+# Outputs:
+#   - "-1":  a is less than b     (a < b)  stdout
+#   -  "0":  a equals b           (a = b)  stdout
+#   -  "1":  a is greater than b  (a > b)  stdout
+#   - Writes to stderr when version string(s) are invalid
+# Returns:
+#   - 0 when able to successfully compare versions
+#   - 1 when invalid versions provided
+#
 semver::compare() {
     # Compare output values (for the sake of readability)
     local -r A_LESS_THAN_B='-1'
