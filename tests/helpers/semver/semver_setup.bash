@@ -31,3 +31,48 @@ semver_setup() {
     # Debug
 #    echo "Semver setup" >&3
 }
+
+# ------------------------------------------------------------------------
+# Test Helpers
+# ------------------------------------------------------------------------
+
+##
+# Run compare method with given data
+#
+# Arguments:
+#   - Name of compare method to run, e.g. "semver::gte"
+#   - Data provider (version_a  version_b   expected_return)
+# Returns:
+#   - 0 (pass)
+#   - 1 (failure)
+#
+run_compare_method() {
+    local method="$1"
+    local data_provider="$2"
+
+    # Process data_provider
+    while read -r line; do
+        local ignore="^\#"
+        if [[ -z $line || $line =~ $ignore ]]; then
+            continue
+        fi
+
+        # Extract data
+        read -r -a data <<< "$line"
+
+        local a="${data[0]}"
+        local b="${data[1]}"
+        local expected="${data[2]}"
+
+        # Debug:
+        # echo "${a} vs. ${b} | expected: ${expected}" >&3
+
+        # Run and assert compare method
+        run "$method" "${a}" "${b}"
+
+        if [[ "$status" != "${expected}" ]]; then
+            fail "Expected '${expected}'. Got '${status}' for '${a}' vs. '${b}', using ${method}"
+        fi
+
+    done <<<"$data_provider"
+}
