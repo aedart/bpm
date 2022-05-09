@@ -297,6 +297,39 @@ semver::eq() {
 }
 
 ##
+# Determine if version a is not equal to version b (a != b)
+#
+# Globals:
+#   - SEMANTIC_VERSION_REGEX
+# Arguments:
+#   - Version string a, e.g. "1.2.3-alpha.beta+exp.sha.5114f85"
+#   - Version string b, e.g. "1.2.3-alpha.1+exp.sha.6873f02"
+# Outputs:
+#   - Writes to stderr when version string(s) are invalid
+# Returns:
+#   - 0 (true) if a is not equal to b
+#   - 1 (false) if a is equal to b
+#
+semver::not_equal_to() {
+    local result=
+    result=$('semver::compare' "$1" "$2")
+
+    if [[ "$result" != '0'  ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+##
+# Alias for semver::not_equal_to
+#
+semver::ne() {
+    # shellcheck disable=SC2046
+    return $('semver::not_equal_to' "$1" "$2")
+}
+
+##
 # Compare two versions against each other
 #
 # Resulting difference is written to stdout, using numeric
