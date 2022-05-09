@@ -317,6 +317,61 @@ semver::compare() {
     return 0
 }
 
+# TODO
+semver::less_than() {
+    return 0
+}
+
+# TODO: alias
+semver::lt() {
+    # shellcheck disable=SC2046
+    return $('semver::less_than' "$1" "$2")
+}
+
+# TODO
+semver::less_than_or_equals_to() {
+    return 0
+}
+
+# TODO: alias
+semver::lte() {
+    # shellcheck disable=SC2046
+    return $('semver::less_than_or_equals_to' "$1" "$2")
+}
+
+# TODO
+semver::greater_than() {
+    return 0
+}
+
+# TODO: alias
+semver::gt() {
+    # shellcheck disable=SC2046
+    return $('semver::greater_than' "$1" "$2")
+}
+
+# TODO
+semver::greater_than_or_equals_to() {
+    return 0
+}
+
+# TODO: alias
+semver::gt() {
+    # shellcheck disable=SC2046
+    return $('semver::greater_than' "$1" "$2")
+}
+
+# TODO
+semver::equals() {
+    return 0
+}
+
+# TODO: alias
+semver::eq() {
+    # shellcheck disable=SC2046
+    return $('semver::equals' "$1" "$2")
+}
+
 # ------------------------------------------------------------------------
 # Internals
 # ------------------------------------------------------------------------
