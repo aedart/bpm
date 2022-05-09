@@ -130,6 +130,172 @@ semver::parse() {
     return 1
 }
 
+
+##
+# Determine if version a is less than version b (a < b)
+#
+# Globals:
+#   - SEMANTIC_VERSION_REGEX
+# Arguments:
+#   - Version string a, e.g. "1.2.3-alpha.beta+exp.sha.5114f85"
+#   - Version string b, e.g. "1.2.3-alpha.1+exp.sha.6873f02"
+# Outputs:
+#   - Writes to stderr when version string(s) are invalid
+# Returns:
+#   - 0 (true) if a is less than b
+#   - 1 (false) if a is not less than b
+#
+semver::less_than() {
+    local result=
+    result=$('semver::compare' "$1" "$2")
+
+    if [[ "$result" == '-1'  ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+##
+# Alias for semver::less_than
+#
+semver::lt() {
+    # shellcheck disable=SC2046
+    return $('semver::less_than' "$1" "$2")
+}
+
+##
+# Determine if version a is less than or equals to version b (a < b | a = b)
+#
+# Globals:
+#   - SEMANTIC_VERSION_REGEX
+# Arguments:
+#   - Version string a, e.g. "1.2.3-alpha.beta+exp.sha.5114f85"
+#   - Version string b, e.g. "1.2.3-alpha.1+exp.sha.6873f02"
+# Outputs:
+#   - Writes to stderr when version string(s) are invalid
+# Returns:
+#   - 0 (true) if a is less than or equal to b
+#   - 1 (false) if a is not less than or equal to b
+#
+semver::less_than_or_equals_to() {
+    local result=
+    result=$('semver::compare' "$1" "$2")
+
+    if [[ "$result" == '-1' || "$result" == '0'  ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+##
+# Alias for semver::less_than_or_equals_to
+#
+semver::lte() {
+    # shellcheck disable=SC2046
+    return $('semver::less_than_or_equals_to' "$1" "$2")
+}
+
+##
+# Determine if version a is greater than version b (a > b)
+#
+# Globals:
+#   - SEMANTIC_VERSION_REGEX
+# Arguments:
+#   - Version string a, e.g. "1.2.3-alpha.beta+exp.sha.5114f85"
+#   - Version string b, e.g. "1.2.3-alpha.1+exp.sha.6873f02"
+# Outputs:
+#   - Writes to stderr when version string(s) are invalid
+# Returns:
+#   - 0 (true) if a is greater than b
+#   - 1 (false) if a is not greater than b
+#
+semver::greater_than() {
+    local result=
+    result=$('semver::compare' "$1" "$2")
+
+    if [[ "$result" == '1'  ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+##
+# Alias for semver::greater_than
+#
+semver::gt() {
+    # shellcheck disable=SC2046
+    return $('semver::greater_than' "$1" "$2")
+}
+
+##
+# Determine if version a is greater than or equal to version b (a > b | a = b)
+#
+# Globals:
+#   - SEMANTIC_VERSION_REGEX
+# Arguments:
+#   - Version string a, e.g. "1.2.3-alpha.beta+exp.sha.5114f85"
+#   - Version string b, e.g. "1.2.3-alpha.1+exp.sha.6873f02"
+# Outputs:
+#   - Writes to stderr when version string(s) are invalid
+# Returns:
+#   - 0 (true) if a is greater than or equal to b
+#   - 1 (false) if a is not greater than or equal to b
+#
+semver::greater_than_or_equals_to() {
+    local result=
+    result=$('semver::compare' "$1" "$2")
+
+    if [[ "$result" == '1' || "$result" == '0'  ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+##
+# Alias for semver::greater_than_or_equals_to
+#
+semver::gte() {
+    # shellcheck disable=SC2046
+    return $('semver::greater_than_or_equals_to' "$1" "$2")
+}
+
+##
+# Determine if version a is equal to version b (a = b)
+#
+# Globals:
+#   - SEMANTIC_VERSION_REGEX
+# Arguments:
+#   - Version string a, e.g. "1.2.3-alpha.beta+exp.sha.5114f85"
+#   - Version string b, e.g. "1.2.3-alpha.1+exp.sha.6873f02"
+# Outputs:
+#   - Writes to stderr when version string(s) are invalid
+# Returns:
+#   - 0 (true) if a is equal to b
+#   - 1 (false) if a is not equal to b
+#
+semver::equal_to() {
+    local result=
+    result=$('semver::compare' "$1" "$2")
+
+    if [[ "$result" == '0'  ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+##
+# Alias for semver::equal_to
+#
+semver::eq() {
+    # shellcheck disable=SC2046
+    return $('semver::equal_to' "$1" "$2")
+}
+
 ##
 # Compare two versions against each other
 #
@@ -315,61 +481,6 @@ semver::compare() {
     # and return accordingly.
     echo $A_EQUALS_B
     return 0
-}
-
-# TODO
-semver::less_than() {
-    return 0
-}
-
-# TODO: alias
-semver::lt() {
-    # shellcheck disable=SC2046
-    return $('semver::less_than' "$1" "$2")
-}
-
-# TODO
-semver::less_than_or_equals_to() {
-    return 0
-}
-
-# TODO: alias
-semver::lte() {
-    # shellcheck disable=SC2046
-    return $('semver::less_than_or_equals_to' "$1" "$2")
-}
-
-# TODO
-semver::greater_than() {
-    return 0
-}
-
-# TODO: alias
-semver::gt() {
-    # shellcheck disable=SC2046
-    return $('semver::greater_than' "$1" "$2")
-}
-
-# TODO
-semver::greater_than_or_equals_to() {
-    return 0
-}
-
-# TODO: alias
-semver::gt() {
-    # shellcheck disable=SC2046
-    return $('semver::greater_than' "$1" "$2")
-}
-
-# TODO
-semver::equals() {
-    return 0
-}
-
-# TODO: alias
-semver::eq() {
-    # shellcheck disable=SC2046
-    return $('semver::equals' "$1" "$2")
 }
 
 # ------------------------------------------------------------------------
