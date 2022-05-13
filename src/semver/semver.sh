@@ -29,20 +29,25 @@
 # Semantic Version Regex
 # ------------------------------------------------------------------------
 
-# Unfortunately, bash only supports "Extended Regular Expressions (ERE)".
-# Thus, no builtin support for "Perl-compatible regular expressions (PCRE)".
-# Therefore, a custom regex is made, based on the following:
+# Slightly modified version of the official regex from https://semver.org.
+# Bash only supports "Extended Regular Expressions (ERE)". It does not support
+# "Perl-compatible regular expressions (PCRE)". Thus, regex is an adaptation.
 #
-# Original: ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
+# In addition, this regex allows optional "v" or "V" as a prefix, e.g. v1.2.3 or V1.2.3.
+# This is NOT in accordance to the standard, but it is required to match git tags that
+# are labelled such.
+#
+# Original regex: ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$
 # Source: https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
 
+readonly SEMVER_PREFIX="([v|V]{0,1})"
 readonly SEMVER_DIGITS="(0|[1-9][0-9]*)"
 readonly SEMVER_MAJOR=$SEMVER_DIGITS
 readonly SEMVER_MINOR=$SEMVER_DIGITS
 readonly SEMVER_PATCH=$SEMVER_DIGITS
 readonly SEMVER_PRE_RELEASE="?(\\-[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)*"
 readonly SEMVER_BUILD_METADATA="?(\\+[0-9A-Za-z-]+(\\.[0-9A-Za-z-]+)*)?$"
-readonly SEMANTIC_VERSION_REGEX="^${SEMVER_MAJOR}\\.${SEMVER_MINOR}\\.${SEMVER_PATCH}${SEMVER_PRE_RELEASE}${SEMVER_BUILD_METADATA}"
+readonly SEMANTIC_VERSION_REGEX="^${SEMVER_PREFIX}${SEMVER_MAJOR}\\.${SEMVER_MINOR}\\.${SEMVER_PATCH}${SEMVER_PRE_RELEASE}${SEMVER_BUILD_METADATA}"
 
 # ------------------------------------------------------------------------
 # Public methods
@@ -84,6 +89,7 @@ semver::is_valid() {
 # echo "patch: ${my_version_array['patch']}"
 # echo "pre-release: ${my_version_array['pre_release']}"
 # echo "build meta-data: ${my_version_array['build_meta']}"
+# echo "evt. prefix: ${my_version_array['prefix']}"
 # ```
 #
 # Globals:
@@ -106,22 +112,25 @@ semver::parse() {
         # Store full version string that was matched
         version_array['version']="${BASH_REMATCH[0]}"
 
+        # Eventual "v" prefix
+        version_array['prefix']="${BASH_REMATCH[1]}"
+
         # Store major, minor and patch
-        version_array['major']="${BASH_REMATCH[1]}"
-        version_array['minor']="${BASH_REMATCH[2]}"
-        version_array['patch']="${BASH_REMATCH[3]}"
+        version_array['major']="${BASH_REMATCH[2]}"
+        version_array['minor']="${BASH_REMATCH[3]}"
+        version_array['patch']="${BASH_REMATCH[4]}"
 
         # Store eventual pre-release. Note, due to regex
         # we must remove leading "-" sign.
-        version_array['pre_release']="${BASH_REMATCH[4]#\-}"
+        version_array['pre_release']="${BASH_REMATCH[5]#\-}"
 
         # Match group 5 is a nested group part of the pre-
         # release. This must be ignored.
-        #echo "(nested in pre_release): ${BASH_REMATCH[5]}"
+        #echo "(nested in pre_release): ${BASH_REMATCH[6]}"
 
         # Finally, store eventual build meta-data. Here too
         # a leading symbol ("+" sign) must be removed.
-        version_array['build_meta']="${BASH_REMATCH[6]#\+}"
+        version_array['build_meta']="${BASH_REMATCH[7]#\+}"
 
         return 0
     fi

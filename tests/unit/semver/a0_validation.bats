@@ -21,11 +21,12 @@ setup() {
 1.2.3-alpha.beta                        0
 5.0.0-alpha.beta.3+exp.sha.5114f85      0
 1.0.0+exp.sha.5114f85                   0
+v1.0.0                                  0   # (v) prefix is not acc. to standard, but allowed by this parser!
+V1.0.0                                  0   # (V) prefix is not acc. to standard, but allowed by this parser!
 x                                       1
 x.y.z                                   1
 1.0                                     1
 1.0.a                                   1
-v1.0.0                                  1   # (v) prefix is actually not allowed!
 1.0.0-                                  1
 1.0.0-beta alpha                        1
 1.0.0-beta_alpha                        1   # Underscore (_) is not allowed in pre-release identifier!
