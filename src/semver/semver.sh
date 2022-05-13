@@ -525,6 +525,26 @@ semver::compare() {
     return 0
 }
 
+# TODO
+semver::satisfies() {
+    local version="$1"
+    local constraints="$2"
+
+    # TODO: Fail if version is not valid
+    # TODO: Fail if no constraints given
+
+    # Split constraints by logical OR
+    mapfile -t or_constraints < <(semver::_split "${constraints}" "||")
+
+    # Iterate through each group of constraints and match against version.
+    for or_constraint in "${or_constraints[@]}"; do
+        echo "constraint: $or_constraint"
+
+        # TODO: Split "or constraint" further by comma or whitespace => and constraints
+
+    done
+}
+
 # ------------------------------------------------------------------------
 # Internals
 # ------------------------------------------------------------------------
@@ -539,4 +559,60 @@ semver::compare() {
 #
 semver::_output_error() {
     echo -e "$*" >&2;
+}
+
+##
+# Split a string by a delimiter
+#
+# Method ensures each element is trimmed!
+#
+# Example:
+# ```bash
+# # Populate into an array
+# mapfile -t arr < <(semver::_split "^1.0.0 || >=2.0.0 <3.0.0" "||")
+#
+# echo "${arr[@]}"
+# ```
+#
+# Arguments:
+#   - String to be split, e.g. "^1.0.0 || >=2.0.0 <3.0.0"
+#   - delimiter, e.g. "||"
+# Outputs:
+#   - Writes each element on a new line, on stdout
+# Returns:
+#   - 0 when successful
+#   - 1 on failure
+#
+semver::_split() {
+    # TODO: Extract into own module?
+    local str="$1"
+    local delimiter="$2"
+
+    mapfile -t arr < <(printf "%s" "${str//${delimiter}/$'\n'}")
+
+    # Trim each element
+    for i in "${arr[@]}"; do
+        semver::_trim "$i"
+    done
+}
+
+##
+# Trim string for leading and trailing whitespace
+#
+# Arguments:
+#   - string to be trimmed
+# Outputs:
+#   - Writes trimmed string to stdout
+#
+semver::_trim() {
+    # TODO: replace with str::trim ?
+    local str="$1"
+
+    shopt -s extglob
+
+    # Remove leading and trailing whitespaces
+    str="${str##*( )}"
+    str="${str%%*( )}"
+
+    echo "$str"
 }
