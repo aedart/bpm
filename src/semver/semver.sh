@@ -530,19 +530,81 @@ semver::satisfies() {
     local version="$1"
     local constraints="$2"
 
+    shopt -s extglob
+
     # TODO: Fail if version is not valid
     # TODO: Fail if no constraints given
 
-    # Split constraints by logical OR
-    mapfile -t or_constraints < <(semver::_split "${constraints}" "||")
+    # Split constraints by logical OR. Also, ensure that multiple whitespace chars are
+    # replaced with a single whitespace.
+    mapfile -t or_constraints < <(semver::_split "${constraints//+([[:blank:]])/ }" "||")
 
     # Iterate through each group of constraints and match against version.
     for or_constraint in "${or_constraints[@]}"; do
-        echo "constraint: $or_constraint"
+        # The constraints array that must be matched for this "or group"
+        local -a constraints=()
 
-        # TODO: Split "or constraint" further by comma or whitespace => and constraints
+        # Replace evt. alias token ( as ), so that logical AND constraints can
+        # be split easier.
+        local alias_replace_token="_as_"
+        or_constraint="${or_constraint/[[:blank:]]*as[[:blank:]]/${alias_replace_token}}"
+
+        # Split constraints by logical AND (in this case marked by whitespace)
+        mapfile -t and_constraints < <(semver::_split "${or_constraint}" " ")
+
+        # Prepare and normalise the logical AND constraints.
+        for and_constraint in "${and_constraints[@]}"; do
+#            echo "AND constraint string: ${and_constraint}"
+
+            local constraint="${and_constraint}"
+
+            # When an alias is given, then we use it as the constraint
+            local has_alias="${alias_replace_token}"
+            if [[ "$constraint" =~ $has_alias ]]; then
+                constraint="${constraint##[vV<>=\!\^\~0-9a-zA-Z\.\-\+@_]*${alias_replace_token}}"
+            fi
+
+            # Wildcard (*)
+            #
+            # A single wildcard means that any version can be matched.
+            if [[ "${constraint}" == "*" ]]; then
+                constraints+=(">=0.0.0-0")
+                continue
+            fi
+
+            # TODO: Tilde (~)
+            # TODO: Caret (^)
+            # TODO: x range (e.g. 1.x, 1.2.x, 1.*, 1.2.*)
+            # TODO: Hyphen range (from - to)
+            # TODO: Ordinary Comparators (<, <=, >, >=, =, !=)
+
+            # TODO: Regex to match version identifiers only: (\d+)\.(\d+)\.(\d+)  - not too sure about it!
+
+            # Finally, add the constraint to list that must be matched
+            constraints+=("${constraint}")
+        done
+
+        # ------------------------------------------------------------------------
+
+        # Amount of matches
+        local amount_matched=0
+
+        # Match all normalised constraints
+        for to_match in "${constraints[@]}"; do
+            echo "Must match ${to_match}"
+        done
+
+        # TODO: Return success, if all constraints are matched
+
+        # ------------------------------------------------------------------------
+
+        echo "or..."
+
 
     done
+
+    # TODO: When reached here, it means that version was not matched to any
+    # TODO: of the given constraints.
 }
 
 # ------------------------------------------------------------------------
